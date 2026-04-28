@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create account — Ungapped</title>
+<meta name="description" content="Create your Ungapped account. No credit card required. Get started in 30 seconds.">
+<meta property="og:title" content="Create account — Ungapped">
+<meta property="og:image" content="https://placehold.co/1200x630/1FB6B6/FFFFFF?text=Ungapped">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23E94B6E'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='20' font-weight='700' fill='white' text-anchor='middle'%3EU%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+:root {
+  --teal: #1FB6B6;
+  --teal-dark: #189A9A;
+  --teal-soft: #E5F7F7;
+  --coral: #E94B6E;
+  --coral-dark: #D43A5C;
+  --coral-soft: #FCE5EA;
+  --yellow: #F9D85A;
+  --bg: #FFFFFF;
+  --bg-off: #F8F8F8;
+  --bg-section: #F4F4F4;
+  --text: #1A1A1A;
+  --text-mid: #6B6B6B;
+  --border: #E5E5E5;
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --radius: 12px;
+  --radius-btn: 6px;
+}
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: 'Open Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+a { color: inherit; text-decoration: none; }
+button, input { font-family: inherit; }
+:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; border-radius: 4px; }
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 8px;
+  background: var(--text);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  z-index: 1000;
+  font-weight: 600;
+}
+.skip-link:focus { top: 8px; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== Layout ===== */
+.split {
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px) {
+  .split { grid-template-columns: 5fr 6fr; }
+}
+@media (min-width: 1024px) {
+  .split { grid-template-columns: 45fr 55fr; }
+}
+
+/* ===== Left pane (form) ===== */
+.pane-form {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 24px 40px;
+}
+@media (min-width: 768px) {
+  .pane-form { padding: 32px 40px 40px; }
+}
+@media (min-width: 1024px) {
+  .pane-form { padding: 40px 64px 48px; }
+}
+
+.brand-row {
+  margin-bottom: 32px;
+}
+.brand-row a {
+  display: inline-flex;
+  align-items: center;
+}
+.brand-row img { display: block; height: 32px; width: auto; }
+
+.form-wrap {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 10px;
+  color: var(--text);
+}
+@media (min-width: 1024px) {
+  h1 { font-size: 32px; }
+}
+
+.login-line {
+  font-size: 14px;
+  color: var(--text-mid);
+  margin: 0 0 24px;
+}
+.login-line a {
+  color: var(--coral);
+  font-weight: 600;
+}
+.login-line a:hover { color: var(--coral-dark); text-decoration: underline; }
+
+/* SSO buttons */
+.sso-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.sso-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 48px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.sso-btn:hover { border-color: var(--text); background: var(--bg-off); }
+.sso-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 20px;
+  color: var(--text-mid);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Form fields */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.field-input {
+  position: relative;
+}
+.field input[type="email"],
+.field input[type="password"],
+.field input[type="text"] {
+  width: 100%;
+  height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  font-size: 15px;
+  color: var(--text);
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field input:focus {
+  outline: none;
+  border-color: var(--coral);
+  box-shadow: 0 0 0 3px rgba(233, 75, 110, 0.15);
+}
+.field-input.has-toggle input { padding-right: 44px; }
+.toggle-pwd {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  color: var(--text-mid);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.toggle-pwd:hover { color: var(--text); background: var(--bg-off); }
+.toggle-pwd svg { width: 18px; height: 18px; }
+.toggle-pwd .eye-off { display: none; }
+.toggle-pwd[aria-pressed="true"] .eye { display: none; }
+.toggle-pwd[aria-pressed="true"] .eye-off { display: block; }
+.field .hint {
+  font-size: 12px;
+  color: var(--text-mid);
+}
+
+/* Primary submit */
+.btn-create {
+  width: 100%;
+  height: 48px;
+  background: var(--coral);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 4px;
+}
+.btn-create:hover { background: var(--coral-dark); }
+
+.terms {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.5;
+  margin: 16px 0 0;
+}
+.terms a { color: var(--teal); text-decoration: underline; text-underline-offset: 2px; }
+.terms a:hover { color: var(--teal-dark); }
+
+/* ===== Right pane (product proof) ===== */
+.pane-proof {
+  position: relative;
+  display: none;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--coral-soft) 0%, var(--teal-soft) 100%);
+  padding: 56px 48px;
+}
+@media (min-width: 768px) { .pane-proof { display: flex; flex-direction: column; } }
+
+.pane-proof::before,
+.pane-proof::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.pane-proof::before {
+  top: -120px;
+  left: -100px;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(233, 75, 110, 0.45) 0%, rgba(233, 75, 110, 0) 70%);
+}
+.pane-proof::after {
+  bottom: -140px;
+  right: -120px;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(31, 182, 182, 0.5) 0%, rgba(31, 182, 182, 0) 70%);
+}
+
+.pane-proof-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  gap: 20px;
+}
+.pane-proof h2 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--text);
+  margin: 0 0 4px;
+  max-width: 520px;
+}
+.pane-proof .pane-sub {
+  font-size: 17px;
+  color: var(--text-mid);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 480px;
+}
+
+/* Mock product visual */
+.mock-stage {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 4 / 3;
+  margin: 16px auto 0;
+}
+.mock-dashboard {
+  position: absolute;
+  inset: 8% 4% 4% 4%;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14);
+  padding: 18px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+.mock-dashboard .mock-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: -6px -6px 4px;
+}
+.mock-dashboard .mock-toolbar span {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--border);
+}
+.mock-dashboard h3 {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+.mock-dashboard .mock-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--bg-off);
+  border-radius: 8px;
+  font-size: 11px;
+}
+.mock-dashboard .mock-row .label {
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+}
+.mock-dashboard .mock-row .meta {
+  color: var(--text-mid);
+}
+.mock-dashboard .mock-row .stat {
+  font-weight: 700;
+  color: var(--teal);
+}
+
+/* Floating stat cards over the dashboard */
+.mock-card {
+  position: absolute;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  padding: 12px 14px;
+  font-size: 11px;
+  text-align: left;
+  z-index: 2;
+}
+.mock-card .label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.mock-card .num {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.mock-card .delta {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--teal);
+  margin-left: 4px;
+}
+.mock-card .delta.coral { color: var(--coral); }
+
+.mock-card-tl { top: 6%; left: -2%; width: 168px; }
+.mock-card-tr { top: 14%; right: -4%; width: 178px; }
+.mock-card-br { bottom: 6%; right: -3%; width: 188px; }
+.mock-card-bl { bottom: 12%; left: -4%; width: 180px; }
+
+/* Donut */
+.donut {
+  --p: 65;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--teal) 0% 45%,
+    var(--coral) 45% 65%,
+    var(--yellow) 65% 100%
+  );
+  position: relative;
+  margin: 6px 0 4px;
+}
+.donut::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  background: #fff;
+  border-radius: 50%;
+}
+.donut-legend {
+  font-size: 9px;
+  color: var(--text-mid);
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mock-card-tl .donut-row { display: flex; gap: 8px; align-items: center; }
+.donut-legend span::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.donut-legend span:nth-child(1)::before { background: var(--teal); }
+.donut-legend span:nth-child(2)::before { background: var(--coral); }
+.donut-legend span:nth-child(3)::before { background: var(--yellow); }
+
+/* Mini bar chart */
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 28px;
+  margin-top: 6px;
+}
+.bars span {
+  flex: 1;
+  background: var(--teal);
+  border-radius: 2px 2px 0 0;
+  opacity: 0.85;
+}
+.bars span:nth-child(1) { height: 30%; }
+.bars span:nth-child(2) { height: 50%; }
+.bars span:nth-child(3) { height: 35%; }
+.bars span:nth-child(4) { height: 70%; }
+.bars span:nth-child(5) { height: 90%; }
+.bars span:nth-child(6) { height: 60%; }
+.bars span:nth-child(7) { height: 100%; background: var(--coral); }
+
+/* Progress bar */
+.progress {
+  height: 6px;
+  background: var(--bg-section);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.progress > i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--coral));
+}
+
+/* Trust microcopy */
+.trust-foot {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-mid);
+  font-weight: 500;
+  padding-top: 28px;
+}
+
+/* Responsive scale-down for mock cards on tablet */
+@media (max-width: 1023px) {
+  .mock-card { transform: scale(0.85); transform-origin: top left; }
+  .mock-card-tr { transform-origin: top right; }
+  .mock-card-bl { transform-origin: bottom left; }
+  .mock-card-br { transform-origin: bottom right; }
+}
+</style>
+</head>
+<body>
+<a href="#form" class="skip-link">Skip to form</a>
+<div class="split">
+  <!-- LEFT PANE -->
+  <section class="pane-form" aria-labelledby="signup-heading">
+    <div class="brand-row">
+      <a href="index.en.html" aria-label="Ungapped home">
+        <img src="Ungapped-logo-md-turquoise-grey.svg" alt="Ungapped">
+      </a>
+    </div>
+
+    <div class="form-wrap" id="form">
+      <h1 id="signup-heading">Create account</h1>
+      <p class="login-line">Already have an account? <a href="#">Log in</a></p>
+
+      <div class="sso-stack">
+        <button type="button" class="sso-btn" id="sso-google" aria-label="Continue with Google">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.4-.4-3.5z"/>
+            <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16.1 19 13 24 13c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.4 6.3 14.7z"/>
+            <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2c-2 1.4-4.5 2.4-7.2 2.4-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.6 39.6 16.3 44 24 44z"/>
+            <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.3-4.1 5.7l6.2 5.2c-.4.4 6.6-4.8 6.6-14.9 0-1.2-.1-2.4-.4-3.5z"/>
+          </svg>
+          Continue with Google
+        </button>
+        <button type="button" class="sso-btn" id="sso-microsoft" aria-label="Continue with Microsoft">
+          <svg viewBox="0 0 23 23" aria-hidden="true">
+            <rect x="1" y="1" width="10" height="10" fill="#F25022"/>
+            <rect x="12" y="1" width="10" height="10" fill="#7FBA00"/>
+            <rect x="1" y="12" width="10" height="10" fill="#00A4EF"/>
+            <rect x="12" y="12" width="10" height="10" fill="#FFB900"/>
+          </svg>
+          Continue with Microsoft
+        </button>
+      </div>
+
+      <div class="divider" aria-hidden="true">or</div>
+
+      <form id="signup-form" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <div class="field-input">
+            <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@company.com">
+          </div>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="field-input has-toggle">
+            <input id="password" name="password" type="password" required minlength="8" autocomplete="new-password">
+            <button type="button" class="toggle-pwd" id="toggle-pwd" aria-label="Show password" aria-pressed="false">
+              <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+          <span class="hint">Minimum 8 characters</span>
+        </div>
+        <button type="submit" class="btn-create">Create account</button>
+        <p class="terms">By creating an account you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- RIGHT PANE -->
+  <aside class="pane-proof" aria-label="What you get with Ungapped">
+    <div class="pane-proof-inner">
+      <h2>Boost your digital communication with Ungapped.</h2>
+      <p class="pane-sub">Our intuitive platform makes it easy to create on-target campaigns, with or without advanced expertise.</p>
+
+      <div class="mock-stage" aria-hidden="true">
+        <div class="mock-dashboard">
+          <div class="mock-toolbar"><span></span><span></span><span></span></div>
+          <h3>Campaigns this week</h3>
+          <div class="mock-row">
+            <span class="label">Weekly news</span>
+            <span class="meta">Mon · 09:00 · 4,210 recipients</span>
+            <span class="stat">+12%</span>
+          </div>
+          <div class="mock-row">
+            <span class="label">Weekly campaigns</span>
+            <span class="meta">Thu · 11:00 · 3,111 recipients</span>
+            <span class="stat">+18%</span>
+          </div>
+          <div class="mock-row">
+            <span class="label">Welcome flow</span>
+            <span class="meta">Automation · 1,470 recipients</span>
+            <span class="stat">+24%</span>
+          </div>
+        </div>
+
+        <!-- Floating cards -->
+        <div class="mock-card mock-card-tl">
+          <span class="label">New active subscribers</span>
+          <div class="donut-row">
+            <div class="donut" aria-hidden="true"></div>
+            <div>
+              <span class="num">135</span>
+              <div class="donut-legend">
+                <span>45% Manual import</span>
+                <span>20% Integration</span>
+                <span>35% Signup form</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mock-card mock-card-tr">
+          <span class="label">Opens</span>
+          <span class="num">2,512 <span class="delta">↑+33.3%</span></span>
+        </div>
+
+        <div class="mock-card mock-card-br">
+          <span class="label">Total clicks</span>
+          <span class="num">1,707 <span class="delta">↑+65%</span></span>
+          <div class="bars" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="mock-card mock-card-bl">
+          <span class="label">Total sent</span>
+          <span class="num">7,321 <span class="delta">↑+23</span></span>
+          <div class="progress" aria-hidden="true"><i></i></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="trust-foot">1000+ European organizations · Capterra 4.5★ · G2 4.3★ · GDPR by default</p>
+  </aside>
+</div>
+
+<script>
+(function() {
+  // Password show/hide toggle
+  const toggle = document.getElementById('toggle-pwd');
+  const pwd = document.getElementById('password');
+  if (toggle && pwd) {
+    toggle.addEventListener('click', () => {
+      const pressed = toggle.getAttribute('aria-pressed') === 'true';
+      toggle.setAttribute('aria-pressed', pressed ? 'false' : 'true');
+      toggle.setAttribute('aria-label', pressed ? 'Show password' : 'Hide password');
+      pwd.type = pressed ? 'password' : 'text';
+    });
+  }
+
+  // SSO placeholder
+  ['sso-google', 'sso-microsoft'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener('click', () => {
+      const provider = id === 'sso-google' ? 'Google' : 'Microsoft';
+      console.log('SSO clicked:', provider);
+      alert(provider + ' SSO is on its way. Use email and password for now.');
+    });
+  });
+
+  // Submit
+  const form = document.getElementById('signup-form');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = form.querySelector('#email');
+      const password = form.querySelector('#password');
+      let firstInvalid = null;
+      [email, password].forEach(f => {
+        if (!f.checkValidity()) {
+          f.setAttribute('aria-invalid', 'true');
+          if (!firstInvalid) firstInvalid = f;
+        } else {
+          f.removeAttribute('aria-invalid');
+        }
+      });
+      if (firstInvalid) { firstInvalid.focus(); return; }
+      console.log('signup-submit', { email: email.value, password: '••••••' });
+      alert('Thanks! Your account is being created (placeholder — Erik wires the backend).');
+    });
+  }
+})();
+</script>
+</body>
+</html>
