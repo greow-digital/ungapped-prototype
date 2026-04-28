@@ -1059,32 +1059,39 @@ section { padding: 48px 0; }
 .steps-list {
   list-style: none;
   padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 32px;
+  margin: 0 auto;
+  max-width: 880px;
   position: relative;
+}
+.steps-list::before {
+  content: '';
+  position: absolute;
+  left: 23px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: var(--teal-soft);
 }
 .step-item {
   position: relative;
-  background: #fff;
-  border-radius: var(--radius);
-  padding: 28px;
-  border: 1px solid var(--border);
-  transition: box-shadow 0.2s, border-color 0.2s;
+  padding: 4px 0 32px 72px;
 }
-.step-item:hover { box-shadow: var(--shadow-sm); border-color: var(--teal-soft); }
+.step-item:last-child { padding-bottom: 0; }
 .step-number {
+  position: absolute;
+  left: 0;
+  top: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: var(--teal);
   color: #fff;
   font-weight: 700;
   font-size: 18px;
-  margin-bottom: 16px;
+  z-index: 1;
 }
 .step-meta {
   display: block;
@@ -1095,23 +1102,34 @@ section { padding: 48px 0; }
   letter-spacing: 0.06em;
   margin-bottom: 6px;
 }
-.step-item h3 { font-size: 18px; margin-bottom: 8px; }
-.step-item p { color: var(--text-mid); font-size: 15px; margin: 0 0 16px; }
-.step-thumb {
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--bg-off);
-  aspect-ratio: 3 / 2;
-}
-.step-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.step-item h3 { font-size: 20px; margin-bottom: 8px; }
+.step-item p { color: var(--text-mid); font-size: 15px; margin: 0; }
 
 @media (min-width: 768px) {
-  .steps-list { grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .step-item { padding: 24px; }
-}
-@media (min-width: 1024px) {
-  .steps-list { gap: 24px; }
-  .step-item { padding: 28px; }
+  .steps-list::before { left: 50%; transform: translateX(-1px); }
+  .step-item {
+    width: 50%;
+    padding: 4px 56px 56px 0;
+  }
+  .step-item:last-child { padding-bottom: 0; }
+  .step-item:nth-child(odd) {
+    margin-left: 0;
+    margin-right: auto;
+    text-align: right;
+  }
+  .step-item:nth-child(odd) .step-number {
+    left: auto;
+    right: -24px;
+  }
+  .step-item:nth-child(even) {
+    margin-left: auto;
+    margin-right: 0;
+    text-align: left;
+    padding: 4px 0 56px 56px;
+  }
+  .step-item:nth-child(even) .step-number {
+    left: -24px;
+  }
 }
 
 .steps-cta {
@@ -2121,28 +2139,24 @@ section { padding: 48px 0; }
         <span class="step-meta">Step 1 · 30 seconds</span>
         <h3>Create account</h3>
         <p>No credit card. Just email and password. You're in within 30 seconds.</p>
-        <div class="step-thumb"><img src="images/home-img-1.jpg" alt="Screenshot of the signup form"></div>
       </li>
       <li class="step-item reveal">
         <span class="step-number" aria-hidden="true">2</span>
         <span class="step-meta">Step 2 · 5 minutes</span>
         <h3>Import contacts</h3>
         <p>CSV, Pipedrive, HubSpot, Salesforce or manual. GDPR-compliant import with consent tracking.</p>
-        <div class="step-thumb"><img src="images/home-img-2.jpg" alt="Screenshot of contact import"></div>
       </li>
       <li class="step-item reveal">
         <span class="step-number" aria-hidden="true">3</span>
         <span class="step-meta">Step 3 · 15 minutes</span>
         <h3>Build your first campaign</h3>
         <p>Choose from 50+ professional templates. Drag-and-drop. Preview, test, send.</p>
-        <div class="step-thumb"><img src="images/home-img-3.jpg" alt="Screenshot of the campaign builder"></div>
       </li>
       <li class="step-item reveal">
         <span class="step-number" aria-hidden="true">4</span>
         <span class="step-meta">Step 4 · Ongoing</span>
         <h3>Measure and iterate</h3>
         <p>Real-time analytics. See opens, clicks, conversions. Build automations on what works.</p>
-        <div class="step-thumb"><img src="https://placehold.co/240x160/F4F4F4/1FB6B6?text=Analytics" alt="Screenshot of analytics view"></div>
       </li>
     </ol>
     <div class="steps-cta reveal" data-track-cta="step-bottom">
