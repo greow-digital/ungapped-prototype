@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Group Marketing Dashboard — Liana · Ungapped · Profinder</title>
+<style>
+:root {
+  --coral: #E94B6E;
+  --coral-soft: #FCE5EA;
+  --teal: #1FB6B6;
+  --teal-soft: #E5F7F7;
+  --jungle: #195B5A;
+  --alabaster: #F7F4E8;
+  --bg: #F8F8F8;
+  --card-bg: #FFFFFF;
+  --border: #E5E5E5;
+  --text: #1A1A1A;
+  --text-mid: #6B6B6B;
+  --text-dim: #9B9B9B;
+  --green: #1FB667;
+  --red: #E94B6E;
+  --amber: #F9B250;
+  --yellow-pill: #F9D85A;
+  --purple: #6B5DD3;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Open Sans', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 20px;
+}
+
+.dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-title h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.header-title .sub {
+  font-size: 12px;
+  color: var(--text-mid);
+  margin-top: 2px;
+}
+
+.header-status {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  display: inline-block;
+  margin-right: 4px;
+}
+
+/* Global filter bar */
+.filter-bar {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  display: grid;
+  /* Brand needs more width (4 long pills); Country less (5 short pills); Granularity 3 short pills */
+  grid-template-columns: 1.8fr 1.1fr 1.4fr 1.2fr 1fr;
+  gap: 16px;
+  align-items: end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0; /* allow shrinking inside grid */
+}
+
+.filter-group .filter-pills {
+  flex-wrap: nowrap; /* keep pills on one line */
+}
+
+.filter-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-mid);
+}
+
+.filter-pills {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text-mid);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filter-pill.active {
+  background: var(--jungle);
+  color: white;
+  border-color: var(--jungle);
+}
+
+.filter-pill:hover:not(.active) {
+  border-color: var(--text);
+}
+
+.filter-select {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text);
+  cursor: pointer;
+  min-width: 160px;
+}
+
+/* Card */
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 22px 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 18px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.card-sub {
+  font-size: 11px;
+  color: var(--text-mid);
+  margin-top: 2px;
+}
+
+.card-meta {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* FUNNEL widget */
+.funnel-stages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.funnel-stage {
+  display: grid;
+  grid-template-columns: 100px 1fr 220px 140px;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.funnel-stage:last-child { border-bottom: none; }
+
+.stage-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.stage-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 36px;
+}
+
+.stage-bar {
+  height: 36px;
+  background: linear-gradient(90deg, var(--teal) 0%, var(--jungle) 100%);
+  border-radius: 6px;
+  flex-shrink: 0;
+  min-width: 28px;
+}
+
+.stage-bar-value {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.stage-bar-delta {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  color: white;
+}
+
+.stage-bar-delta.up { background: var(--green); }
+.stage-bar-delta.down { background: var(--red); }
+.stage-bar-delta.flat { background: var(--text-dim); color: white; }
+
+.delta-inline {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 8px;
+  margin-left: 4px;
+  font-variant-numeric: tabular-nums;
+  vertical-align: 1px;
+}
+.delta-inline.up { color: var(--green); background: #E5F7EE; }
+.delta-inline.down { color: var(--red); background: var(--coral-soft); }
+.delta-inline.flat { color: var(--text-mid); background: var(--bg); }
+
+.stage-conv-delta {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 8px;
+  margin-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.stage-conv-delta.up { color: var(--green); background: #E5F7EE; }
+.stage-conv-delta.down { color: var(--red); background: var(--coral-soft); }
+.stage-conv-delta.flat { color: var(--text-mid); background: var(--bg); }
+
+.stage-detail {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--text-mid);
+}
+
+.stage-detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stage-detail-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.stage-detail-value {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stage-conv {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  text-align: right;
+  font-size: 11px;
+  color: var(--text-mid);
+}
+
+.stage-conv-rate {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  background: white;
+  border: 1.5px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.stage-conv-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* Bar chart widget */
+.barchart-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.legend-strip {
+  display: flex;
+  gap: 14px;
+  font-size: 11px;
+  color: var(--text-mid);
+  margin-bottom: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.barchart-svg {
+  width: 100%;
+  height: 240px;
+}
+
+/* Time series conversion rate widget */
+.cr-controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.cr-btn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text-mid);
+  cursor: pointer;
+}
+
+.cr-btn.active {
+  background: var(--coral);
+  color: white;
+  border-color: var(--coral);
+}
+
+.cr-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.cr-row-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  min-width: 50px;
+}
+
+.cr-row .cr-controls {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.cr-meta {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 14px;
+  font-size: 12px;
+}
+
+.cr-meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.cr-meta-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+
+.cr-meta-value {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.cr-svg {
+  width: 100%;
+  height: 220px;
+}
+
+/* Footer */
+.footer-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.footer-meta .left { display: flex; gap: 14px; align-items: center; }
+
+@media (max-width: 1100px) {
+  .filter-bar { grid-template-columns: 1fr 1fr; }
+  .funnel-stage { grid-template-columns: 80px 1fr 80px; }
+  .funnel-stage .stage-detail { display: none; }
+}
+
+/* ===== TAB NAV ===== */
+.tab-nav {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  margin-bottom: -1px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.tab:hover { color: var(--text); }
+
+.tab.active {
+  color: var(--coral);
+  border-bottom-color: var(--coral);
+}
+
+.tab-meta {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ===== DECISIONS PANEL ===== */
+.decisions-list { display: flex; flex-direction: column; }
+
+.decision-row {
+  display: grid;
+  grid-template-columns: 14px 90px 1fr auto;
+  gap: 14px;
+  align-items: start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.decision-row:last-child { border-bottom: none; }
+
+.severity-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+}
+.sev-high { background: var(--coral); }
+.sev-med { background: var(--amber); }
+.sev-pos { background: var(--green); }
+.sev-info { background: var(--purple); }
+
+.decision-brand {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-align: center;
+  white-space: nowrap;
+  align-self: start;
+  margin-top: 1px;
+}
+.tag-ungapped { background: #FCE5EA; color: #B83456; }
+.tag-profinder { background: #E5F7F7; color: #0D7676; }
+.tag-liana { background: #E8EFEE; color: #195B5A; }
+.tag-group { background: #F0EEFB; color: #4A3FAA; }
+
+.decision-text { font-size: 12px; min-width: 0; }
+.decision-headline {
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+  font-size: 13px;
+}
+.decision-detail { font-size: 11px; color: var(--text-mid); line-height: 1.5; }
+
+.action-btn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.action-btn:hover { background: var(--alabaster); border-color: var(--text-dim); }
+
+/* ===== KPI STRIP ===== */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.kpi-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.kpi-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.kpi-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.kpi-delta {
+  font-size: 11px;
+  color: var(--text-mid);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.kpi-delta .pos { color: var(--green); font-weight: 600; }
+.kpi-delta .neg { color: var(--coral); font-weight: 600; }
+
+/* ===== SOURCED vs INFLUENCED ===== */
+.sourced-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 110px;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.sourced-row:last-child { border-bottom: none; padding-bottom: 4px; }
+
+.sourced-brand {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.sourced-bar {
+  display: flex;
+  height: 30px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #F0F0F0;
+}
+
+.sourced-seg {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+}
+
+.sourced-total {
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+}
+.sourced-total-sub {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.sourced-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  font-size: 11px;
+  color: var(--text-mid);
+}
+
+/* ===== BRAND MINI CARDS ===== */
+.brand-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.brand-mini-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  border-top: 3px solid var(--border);
+}
+.brand-mini-card.brand-u { border-top-color: var(--coral); }
+.brand-mini-card.brand-p { border-top-color: var(--teal); }
+.brand-mini-card.brand-l { border-top-color: var(--jungle); }
+
+.brand-mini-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+
+.brand-mini-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.brand-mini-tag {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.brand-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mini-label {
+  font-size: 9px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 3px;
+  font-weight: 700;
+}
+
+.mini-value {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.mini-delta {
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.mini-delta.pos { color: var(--green); }
+.mini-delta.neg { color: var(--coral); }
+
+.brand-mini-spark {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+
+.brand-mini-spark-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.spark-svg { width: 100%; height: 32px; }
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-title">
+      <h1>🌱 Group Marketing Dashboard</h1>
+      <div class="sub">Liana · Ungapped · Profinder — full-funnel performance</div>
+    </div>
+    <div class="header-status">
+      <span><span class="status-dot"></span>Live · refreshed 2 min ago</span>
+      <span>Sources: Pipedrive · Supermetrics · GA4 · Hotjar</span>
+    </div>
+  </div>
+
+  <!-- Global filter bar -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <div class="filter-label">Brand</div>
+      <div class="filter-pills">
+        <button class="filter-pill active">All</button>
+        <button class="filter-pill">Ungapped</button>
+        <button class="filter-pill">Profinder</button>
+        <button class="filter-pill">Liana</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Country</div>
+      <div class="filter-pills">
+        <button class="filter-pill active">All</button>
+        <button class="filter-pill">SE</button>
+        <button class="filter-pill">FI</button>
+        <button class="filter-pill">NO</button>
+        <button class="filter-pill">DK</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Channel / source</div>
+      <select class="filter-select">
+        <option>All channels</option>
+        <option>LinkedIn paid</option>
+        <option>Paid search</option>
+        <option>SEO / organic</option>
+        <option>Direct + branded</option>
+        <option>Outbound</option>
+        <option>Referral / partner</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Date range</div>
+      <select class="filter-select">
+        <option>Last 90 days</option>
+        <option>Q3 2026</option>
+        <option>YTD 2026</option>
+        <option>Last 12 months</option>
+        <option>Custom range…</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Granularity *</div>
+      <div class="filter-pills">
+        <button class="filter-pill">Daily</button>
+        <button class="filter-pill active">Weekly</button>
+        <button class="filter-pill">Monthly</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tab active" data-target="tab-operational">Operational <span class="tab-meta">funnel-first</span></button>
+    <button class="tab" data-target="tab-executive">Executive <span class="tab-meta">decisions-first</span></button>
+  </div>
+
+  <!-- ============================== -->
+  <!-- TAB 1: OPERATIONAL VIEW -->
+  <!-- ============================== -->
+  <div class="tab-content active" id="tab-operational">
+
+  <!-- WIDGET 1: Funnel -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Full-funnel performance · Acquisition → Closed-won</div>
+        <div class="card-sub">Period totals · funnel does not respect date granularity (always cumulative)</div>
+      </div>
+      <div class="card-meta">Last 90 days</div>
+    </div>
+
+    <div class="funnel-stages">
+
+      <!-- Acquisition (paid media) -->
+      <div class="funnel-stage">
+        <div class="stage-label">Acquisition</div>
+        <div class="stage-bar-wrap">
+          <div class="stage-bar" style="width: 60%;"></div>
+          <span class="stage-bar-value">2.42M impressions</span>
+          <span class="stage-bar-delta up">▲ +12%</span>
+        </div>
+        <div class="stage-detail">
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">Cost</div>
+            <div class="stage-detail-value">145 kSEK <span class="delta-inline up">+8%</span></div>
+          </div>
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">CTR</div>
+            <div class="stage-detail-value">1.84% <span class="delta-inline up">+0.18%</span></div>
+          </div>
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">CPM</div>
+            <div class="stage-detail-value">60 SEK <span class="delta-inline down">+6%</span></div>
+          </div>
+        </div>
+        <div class="stage-conv">
+          <span class="stage-conv-rate">—</span>
+          <span class="stage-conv-label">top of funnel</span>
+        </div>
+      </div>
+
+      <!-- Sessions -->
+      <div class="funnel-stage">
+        <div class="stage-label">Sessions</div>
+        <div class="stage-bar-wrap">
+          <div class="stage-bar" style="width: 47%;"></div>
+          <span class="stage-bar-value">82,400 sessions</span>
+          <span class="stage-bar-delta up">▲ +8%</span>
+        </div>
+        <div class="stage-detail">
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">Avg time</div>
+            <div class="stage-detail-value">2:14 min <span class="delta-inline up">+6 sec</span></div>
+          </div>
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">Bounce</div>
+            <div class="stage-detail-value">42% <span class="delta-inline up">−2%</span></div>
+          </div>
+        </div>
+        <div class="stage-conv">
+          <span class="stage-conv-rate">3.4%</span>
+          <span class="stage-conv-label">CTR → session</span>
+          <span class="stage-conv-delta up">▲ +0.4%</span>
+        </div>
+      </div>
+
+      <!-- Conversions -->
+      <div class="funnel-stage">
+        <div class="stage-label">Conversions</div>
+        <div class="stage-bar-wrap">
+          <div class="stage-bar" style="width: 30%;"></div>
+          <span class="stage-bar-value">8,440 total</span>
+          <span class="stage-bar-delta up">▲ +18%</span>
+        </div>
+        <div class="stage-detail">
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">Signups</div>
+            <div class="stage-detail-value">6,400 <span class="delta-inline up">+22%</span></div>
+          </div>
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">Demos</div>
+            <div class="stage-detail-value">240 <span class="delta-inline up">+34%</span></div>
+          </div>
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">Downloads</div>
+            <div class="stage-detail-value">1,800 <span class="delta-inline down">−8%</span></div>
+          </div>
+        </div>
+        <div class="stage-conv">
+          <span class="stage-conv-rate">10.2%</span>
+          <span class="stage-conv-label">session → conv</span>
+          <span class="stage-conv-delta up">▲ +0.9%</span>
+        </div>
+      </div>
+
+      <!-- MQLs -->
+      <div class="funnel-stage">
+        <div class="stage-label">MQLs</div>
+        <div class="stage-bar-wrap">
+          <div class="stage-bar" style="width: 16%;"></div>
+          <span class="stage-bar-value">1,240 MQLs</span>
+          <span class="stage-bar-delta up">▲ +18%</span>
+        </div>
+        <div class="stage-detail">
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">Lead-score</div>
+            <div class="stage-detail-value">1,240 <span class="delta-inline up">+18%</span></div>
+          </div>
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">Qual rate</div>
+            <div class="stage-detail-value">36% <span class="delta-inline down">−2%</span></div>
+          </div>
+        </div>
+        <div class="stage-conv">
+          <span class="stage-conv-rate">14.7%</span>
+          <span class="stage-conv-label">conv → MQL</span>
+          <span class="stage-conv-delta down">▼ −0.6%</span>
+        </div>
+      </div>
+
+      <!-- SQLs -->
+      <div class="funnel-stage">
+        <div class="stage-label">SQLs</div>
+        <div class="stage-bar-wrap">
+          <div class="stage-bar" style="width: 8%;"></div>
+          <span class="stage-bar-value">510 SQLs</span>
+          <span class="stage-bar-delta up">▲ +14%</span>
+        </div>
+        <div class="stage-detail">
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">Accepted</div>
+            <div class="stage-detail-value">510 <span class="delta-inline up">+14%</span></div>
+          </div>
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">Cycle</div>
+            <div class="stage-detail-value">38 days <span class="delta-inline up">−4 days</span></div>
+          </div>
+        </div>
+        <div class="stage-conv">
+          <span class="stage-conv-rate">41%</span>
+          <span class="stage-conv-label">MQL → SQL</span>
+          <span class="stage-conv-delta up">▲ +3%</span>
+        </div>
+      </div>
+
+      <!-- Closed won -->
+      <div class="funnel-stage">
+        <div class="stage-label">Closed won</div>
+        <div class="stage-bar-wrap">
+          <div class="stage-bar" style="width: 4%; background: linear-gradient(90deg, var(--coral) 0%, #c93a5a 100%);"></div>
+          <span class="stage-bar-value">87 won</span>
+          <span class="stage-bar-delta up">▲ +24%</span>
+        </div>
+        <div class="stage-detail">
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">ARR</div>
+            <div class="stage-detail-value">4.2 MSEK <span class="delta-inline up">+18%</span></div>
+          </div>
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">ACV</div>
+            <div class="stage-detail-value">48 kSEK <span class="delta-inline down">−5%</span></div>
+          </div>
+          <div class="stage-detail-item">
+            <div class="stage-detail-label">Payback</div>
+            <div class="stage-detail-value">14 mo <span class="delta-inline up">−2 mo</span></div>
+          </div>
+        </div>
+        <div class="stage-conv">
+          <span class="stage-conv-rate">17%</span>
+          <span class="stage-conv-label">SQL → won</span>
+          <span class="stage-conv-delta up">▲ +2%</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WIDGET 2: MQL bar chart split by source -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">MQLs over time · split by source</div>
+        <div class="card-sub">Demo-driven MQL volume · stacked by brand</div>
+      </div>
+      <div class="card-meta">Weekly · last 12 weeks</div>
+    </div>
+    <!-- Picker: All / Demos / Signups -->
+    <div class="cr-controls" style="margin-bottom: 12px;">
+      <button class="cr-btn">All</button>
+      <button class="cr-btn active">Demos</button>
+      <button class="cr-btn">Signups</button>
+    </div>
+
+    <!-- Stat row for selected dimension -->
+    <div class="cr-meta">
+      <div class="cr-meta-item">
+        <div class="cr-meta-label">Total demos (12w)</div>
+        <div class="cr-meta-value">307</div>
+      </div>
+      <div class="cr-meta-item">
+        <div class="cr-meta-label">vs prior 12w</div>
+        <div class="cr-meta-value" style="color: var(--green)">▲ +24%</div>
+      </div>
+      <div class="cr-meta-item">
+        <div class="cr-meta-label">Top brand</div>
+        <div class="cr-meta-value">Profinder (40%)</div>
+      </div>
+      <div class="cr-meta-item">
+        <div class="cr-meta-label">This week</div>
+        <div class="cr-meta-value">32</div>
+      </div>
+    </div>
+
+    <div class="legend-strip">
+      <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-dim);">Demos by brand:</span>
+      <div class="legend-item"><span class="legend-swatch" style="background: #F8B6C2"></span>Ungapped</div>
+      <div class="legend-item"><span class="legend-swatch" style="background: #9CDDDD"></span>Profinder</div>
+      <div class="legend-item"><span class="legend-swatch" style="background: #7FA5A4"></span>Liana</div>
+      <div class="legend-item" style="margin-left:auto;color: var(--text-dim)">Trend: ▲ +60% W1 → W12</div>
+    </div>
+    <svg class="barchart-svg" viewBox="0 0 1200 240" preserveAspectRatio="none">
+      <!-- Grid -->
+      <g stroke="#E5E5E5" stroke-width="1">
+        <line x1="40" y1="20" x2="1180" y2="20"/>
+        <line x1="40" y1="65" x2="1180" y2="65"/>
+        <line x1="40" y1="110" x2="1180" y2="110"/>
+        <line x1="40" y1="155" x2="1180" y2="155"/>
+        <line x1="40" y1="200" x2="1180" y2="200" stroke="#9B9B9B"/>
+      </g>
+      <!-- Y labels (Demos scale: 0–40) -->
+      <g font-family="Open Sans" font-size="10" fill="#9B9B9B">
+        <text x="32" y="24" text-anchor="end">40</text>
+        <text x="32" y="69" text-anchor="end">30</text>
+        <text x="32" y="114" text-anchor="end">20</text>
+        <text x="32" y="159" text-anchor="end">10</text>
+        <text x="32" y="204" text-anchor="end">0</text>
+      </g>
+
+      <!-- Stacked bars: 12 weeks, 3 segments each (Liana dem | Profinder dem | Ungapped dem). Scale: 1 demo = 4.5 svg-units; baseline y=200 -->
+
+      <!-- W1 (20: LI 7, PF 8, UG 5) -->
+      <g>
+        <rect x="60" y="168" width="60" height="32" fill="#7FA5A4" rx="2"/>
+        <rect x="60" y="132" width="60" height="36" fill="#9CDDDD"/>
+        <rect x="60" y="109" width="60" height="23" fill="#F8B6C2" rx="2"/>
+      </g>
+
+      <!-- W2 (22: LI 8, PF 9, UG 5) -->
+      <g>
+        <rect x="150" y="164" width="60" height="36" fill="#7FA5A4" rx="2"/>
+        <rect x="150" y="123" width="60" height="41" fill="#9CDDDD"/>
+        <rect x="150" y="100" width="60" height="23" fill="#F8B6C2" rx="2"/>
+      </g>
+
+      <!-- W3 (20: LI 7, PF 8, UG 5) -->
+      <g>
+        <rect x="240" y="168" width="60" height="32" fill="#7FA5A4" rx="2"/>
+        <rect x="240" y="132" width="60" height="36" fill="#9CDDDD"/>
+        <rect x="240" y="109" width="60" height="23" fill="#F8B6C2" rx="2"/>
+      </g>
+
+      <!-- W4 (23: LI 8, PF 9, UG 6) -->
+      <g>
+        <rect x="330" y="164" width="60" height="36" fill="#7FA5A4" rx="2"/>
+        <rect x="330" y="123" width="60" height="41" fill="#9CDDDD"/>
+        <rect x="330" y="96" width="60" height="27" fill="#F8B6C2" rx="2"/>
+      </g>
+
+      <!-- W5 (24: LI 9, PF 9, UG 6) -->
+      <g>
+        <rect x="420" y="159" width="60" height="41" fill="#7FA5A4" rx="2"/>
+        <rect x="420" y="118" width="60" height="41" fill="#9CDDDD"/>
+        <rect x="420" y="91" width="60" height="27" fill="#F8B6C2" rx="2"/>
+      </g>
+
+      <!-- W6 (24: LI 9, PF 9, UG 6) -->
+      <g>
+        <rect x="510" y="159" width="60" height="41" fill="#7FA5A4" rx="2"/>
+        <rect x="510" y="118" width="60" height="41" fill="#9CDDDD"/>
+        <rect x="510" y="91" width="60" height="27" fill="#F8B6C2" rx="2"/>
+      </g>
+
+      <!-- W7 (27: LI 10, PF 11, UG 6) -->
+      <g>
+        <rect x="600" y="155" width="60" height="45" fill="#7FA5A4" rx="2"/>
+        <rect x="600" y="105" width="60" height="50" fill="#9CDDDD"/>
+        <rect x="600" y="78" width="60" height="27" fill="#F8B6C2" rx="2"/>
+      </g>
+
+      <!-- W8 (27: LI 10, PF 11, UG 6) -->
+      <g>
+        <rect x="690" y="155" width="60" height="45" fill="#7FA5A4" rx="2"/>
+        <rect x="690" y="105" width="60" height="50" fill="#9CDDDD"/>
+        <rect x="690" y="78" width="60" height="27" fill="#F8B6C2" rx="2"/>
+      </g>
+
+      <!-- W9 (28: LI 10, PF 11, UG 7) -->
+      <g>
+        <rect x="780" y="155" width="60" height="45" fill="#7FA5A4" rx="2"/>
+        <rect x="780" y="105" width="60" height="50" fill="#9CDDDD"/>
+        <rect x="780" y="73" width="60" height="32" fill="#F8B6C2" rx="2"/>
+      </g>
+
+      <!-- W10 (29: LI 10, PF 12, UG 7) -->
+      <g>
+        <rect x="870" y="155" width="60" height="45" fill="#7FA5A4" rx="2"/>
+        <rect x="870" y="101" width="60" height="54" fill="#9CDDDD"/>
+        <rect x="870" y="69" width="60" height="32" fill="#F8B6C2" rx="2"/>
+      </g>
+
+      <!-- W11 (31: LI 10, PF 13, UG 8) -->
+      <g>
+        <rect x="960" y="155" width="60" height="45" fill="#7FA5A4" rx="2"/>
+        <rect x="960" y="96" width="60" height="59" fill="#9CDDDD"/>
+        <rect x="960" y="60" width="60" height="36" fill="#F8B6C2" rx="2"/>
+      </g>
+
+      <!-- W12 (32: LI 10, PF 13, UG 9, highlighted) -->
+      <g>
+        <rect x="1050" y="155" width="60" height="45" fill="#7FA5A4" rx="2"/>
+        <rect x="1050" y="96" width="60" height="59" fill="#9CDDDD"/>
+        <rect x="1050" y="55" width="60" height="41" fill="#F8B6C2" rx="2"/>
+        <text x="1080" y="48" text-anchor="middle" font-family="Open Sans" font-size="11" font-weight="700" fill="#1A1A1A">32</text>
+      </g>
+
+      <!-- X labels -->
+      <g font-family="Open Sans" font-size="10" fill="#9B9B9B" text-anchor="middle">
+        <text x="90" y="220">W1</text>
+        <text x="180" y="220">W2</text>
+        <text x="270" y="220">W3</text>
+        <text x="360" y="220">W4</text>
+        <text x="450" y="220">W5</text>
+        <text x="540" y="220">W6</text>
+        <text x="630" y="220">W7</text>
+        <text x="720" y="220">W8</text>
+        <text x="810" y="220">W9</text>
+        <text x="900" y="220">W10</text>
+        <text x="990" y="220">W11</text>
+        <text x="1080" y="220">W12</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- WIDGET 3: Conversion rate time series with picker -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Conversion rate · time series</div>
+        <div class="card-sub">Raw conversion rates · dual axis — Sessions→MQL on right (0–3%), MQL→SQL &amp; SQL→Closed won on left (0–60%)</div>
+      </div>
+      <div class="card-meta">Weekly · last 12 weeks</div>
+    </div>
+
+    <!-- Stage picker -->
+    <div class="cr-row">
+      <span class="cr-row-label">Stage</span>
+      <div class="cr-controls">
+        <button class="cr-btn active">All</button>
+        <button class="cr-btn">Sessions → MQL</button>
+        <button class="cr-btn">MQL → SQL</button>
+        <button class="cr-btn">SQL → Closed won</button>
+      </div>
+    </div>
+
+    <!-- Brand picker -->
+    <div class="cr-row" style="margin-bottom: 12px;">
+      <span class="cr-row-label">Brand</span>
+      <div class="cr-controls">
+        <button class="cr-btn active">All brands</button>
+        <button class="cr-btn">Liana</button>
+        <button class="cr-btn">Profinder</button>
+        <button class="cr-btn">Ungapped</button>
+      </div>
+    </div>
+
+    <!-- Stat row: one block per stage when All is selected -->
+    <div class="cr-meta">
+      <div class="cr-meta-item">
+        <div class="cr-meta-label">Sessions → MQL</div>
+        <div class="cr-meta-value">1.51% <span style="font-size: 11px; font-weight: 600; color: var(--green); margin-left: 4px;">▲ +0.18%</span></div>
+        <div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">Target ≥ 1.5% · on target</div>
+      </div>
+      <div class="cr-meta-item">
+        <div class="cr-meta-label">MQL → SQL</div>
+        <div class="cr-meta-value">48% <span style="font-size: 11px; font-weight: 600; color: var(--green); margin-left: 4px;">▲ +3%</span></div>
+        <div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">Target ≥ 50% · 2% under</div>
+      </div>
+      <div class="cr-meta-item">
+        <div class="cr-meta-label">SQL → Closed won</div>
+        <div class="cr-meta-value">25% <span style="font-size: 11px; font-weight: 600; color: var(--green); margin-left: 4px;">▲ +3%</span></div>
+        <div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">Target ≥ 20% · 5% above</div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend-strip">
+      <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-dim);">Stages:</span>
+      <div class="legend-item"><span class="legend-swatch" style="background: #E94B6E"></span>Sessions → MQL <span style="color: var(--text-dim); margin-left: 2px;">(right axis)</span></div>
+      <div class="legend-item"><span class="legend-swatch" style="background: #1FB6B6"></span>MQL → SQL <span style="color: var(--text-dim); margin-left: 2px;">(left axis)</span></div>
+      <div class="legend-item"><span class="legend-swatch" style="background: #195B5A"></span>SQL → Closed won <span style="color: var(--text-dim); margin-left: 2px;">(left axis)</span></div>
+      <div class="legend-item" style="margin-left:auto;color: var(--text-dim)">— — — Target per stage</div>
+    </div>
+
+    <svg class="cr-svg" viewBox="0 0 1220 220" preserveAspectRatio="none">
+      <!-- Grid (shared for both axes) -->
+      <g stroke="#E5E5E5" stroke-width="1">
+        <line x1="40" y1="20" x2="1170" y2="20"/>
+        <line x1="40" y1="78" x2="1170" y2="78"/>
+        <line x1="40" y1="137" x2="1170" y2="137"/>
+        <line x1="40" y1="195" x2="1170" y2="195"/>
+      </g>
+
+      <!-- Left Y-axis labels (0–60% — for MQL→SQL & SQL→Closed won) -->
+      <g font-family="Open Sans" font-size="10" fill="#9B9B9B">
+        <text x="32" y="24" text-anchor="end">60%</text>
+        <text x="32" y="82" text-anchor="end">40%</text>
+        <text x="32" y="141" text-anchor="end">20%</text>
+        <text x="32" y="199" text-anchor="end">0%</text>
+      </g>
+      <text x="32" y="12" text-anchor="end" font-family="Open Sans" font-size="9" font-weight="700" letter-spacing="0.04em" fill="#9B9B9B">LEFT</text>
+
+      <!-- Right Y-axis labels (0–3% — for Sessions→MQL) -->
+      <g font-family="Open Sans" font-size="10" fill="#9B9B9B">
+        <text x="1178" y="24" text-anchor="start">3%</text>
+        <text x="1178" y="82" text-anchor="start">2%</text>
+        <text x="1178" y="141" text-anchor="start">1%</text>
+        <text x="1178" y="199" text-anchor="start">0%</text>
+      </g>
+      <text x="1178" y="12" text-anchor="start" font-family="Open Sans" font-size="9" font-weight="700" letter-spacing="0.04em" fill="#9B9B9B">RIGHT</text>
+
+      <!-- Right axis line -->
+      <line x1="1170" y1="20" x2="1170" y2="195" stroke="#E5E5E5" stroke-width="1"/>
+
+      <!-- Target lines per stage (color-matched, dashed) -->
+      <!-- Sessions→MQL target 1.5% (right axis) → y=108 -->
+      <line x1="40" y1="108" x2="1170" y2="108" stroke="#E94B6E" stroke-width="1" stroke-dasharray="3,4" opacity="0.4"/>
+      <!-- MQL→SQL target 50% (left axis) → y=49 -->
+      <line x1="40" y1="49" x2="1170" y2="49" stroke="#1FB6B6" stroke-width="1" stroke-dasharray="3,4" opacity="0.4"/>
+      <!-- SQL→Closed won target 20% (left axis) → y=137 (overlaps gridline) → offset visually with slight color -->
+      <line x1="40" y1="137" x2="1170" y2="137" stroke="#195B5A" stroke-width="1" stroke-dasharray="3,4" opacity="0.4"/>
+
+      <!-- MQL → SQL (teal): 41% → 48% (left axis, target 50%) -->
+      <polyline fill="none" stroke="#1FB6B6" stroke-width="2.5"
+        points="60,75 150,73 240,70 330,67 420,67 510,64 600,64 690,61 780,58 870,58 960,55 1050,55 1140,55" />
+      <g fill="#1FB6B6">
+        <circle cx="60" cy="75" r="3"/>
+        <circle cx="150" cy="73" r="3"/>
+        <circle cx="240" cy="70" r="3"/>
+        <circle cx="330" cy="67" r="3"/>
+        <circle cx="420" cy="67" r="3"/>
+        <circle cx="510" cy="64" r="3"/>
+        <circle cx="600" cy="64" r="3"/>
+        <circle cx="690" cy="61" r="3"/>
+        <circle cx="780" cy="58" r="3"/>
+        <circle cx="870" cy="58" r="3"/>
+        <circle cx="960" cy="55" r="3"/>
+        <circle cx="1050" cy="55" r="3"/>
+        <circle cx="1140" cy="55" r="4" stroke="white" stroke-width="2"/>
+      </g>
+      <text x="1135" y="48" text-anchor="end" font-family="Open Sans" font-size="11" font-weight="700" fill="#1FB6B6">48%</text>
+
+      <!-- SQL → Closed won (jungle): 20% → 25% (left axis, target 20%) -->
+      <polyline fill="none" stroke="#195B5A" stroke-width="2.5"
+        points="60,137 150,134 240,134 330,131 420,131 510,128 600,128 690,125 780,125 870,122 960,122 1050,122 1140,122" />
+      <g fill="#195B5A">
+        <circle cx="60" cy="137" r="3"/>
+        <circle cx="150" cy="134" r="3"/>
+        <circle cx="240" cy="134" r="3"/>
+        <circle cx="330" cy="131" r="3"/>
+        <circle cx="420" cy="131" r="3"/>
+        <circle cx="510" cy="128" r="3"/>
+        <circle cx="600" cy="128" r="3"/>
+        <circle cx="690" cy="125" r="3"/>
+        <circle cx="780" cy="125" r="3"/>
+        <circle cx="870" cy="122" r="3"/>
+        <circle cx="960" cy="122" r="3"/>
+        <circle cx="1050" cy="122" r="3"/>
+        <circle cx="1140" cy="122" r="4" stroke="white" stroke-width="2"/>
+      </g>
+      <text x="1135" y="115" text-anchor="end" font-family="Open Sans" font-size="11" font-weight="700" fill="#195B5A">25%</text>
+
+      <!-- Sessions → MQL (coral): 1.05% → 1.51% (right axis, target 1.5%) -->
+      <polyline fill="none" stroke="#E94B6E" stroke-width="2.5"
+        points="60,134 150,132 240,130 330,126 420,124 510,120 600,117 690,115 780,112 870,110 960,108 1050,108 1140,107" />
+      <g fill="#E94B6E">
+        <circle cx="60" cy="134" r="3"/>
+        <circle cx="150" cy="132" r="3"/>
+        <circle cx="240" cy="130" r="3"/>
+        <circle cx="330" cy="126" r="3"/>
+        <circle cx="420" cy="124" r="3"/>
+        <circle cx="510" cy="120" r="3"/>
+        <circle cx="600" cy="117" r="3"/>
+        <circle cx="690" cy="115" r="3"/>
+        <circle cx="780" cy="112" r="3"/>
+        <circle cx="870" cy="110" r="3"/>
+        <circle cx="960" cy="108" r="3"/>
+        <circle cx="1050" cy="108" r="3"/>
+        <circle cx="1140" cy="107" r="4" stroke="white" stroke-width="2"/>
+      </g>
+      <text x="1135" y="100" text-anchor="end" font-family="Open Sans" font-size="11" font-weight="700" fill="#E94B6E">1.51%</text>
+
+      <!-- X labels -->
+      <g font-family="Open Sans" font-size="10" fill="#9B9B9B" text-anchor="middle">
+        <text x="60" y="215">W1</text>
+        <text x="150" y="215">W2</text>
+        <text x="240" y="215">W3</text>
+        <text x="330" y="215">W4</text>
+        <text x="420" y="215">W5</text>
+        <text x="510" y="215">W6</text>
+        <text x="600" y="215">W7</text>
+        <text x="690" y="215">W8</text>
+        <text x="780" y="215">W9</text>
+        <text x="870" y="215">W10</text>
+        <text x="960" y="215">W11</text>
+        <text x="1050" y="215">W12</text>
+        <text x="1140" y="215">Now</text>
+      </g>
+    </svg>
+  </div>
+
+  </div><!-- /tab-operational -->
+
+  <!-- ============================== -->
+  <!-- TAB 2: EXECUTIVE VIEW -->
+  <!-- ============================== -->
+  <div class="tab-content" id="tab-executive">
+
+    <!-- DECISIONS PANEL -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">What needs attention this week</div>
+          <div class="card-sub">Auto-detected anomalies + manual flags · ranked by impact</div>
+        </div>
+        <div class="card-meta">5 items · updated 12 min ago</div>
+      </div>
+      <div class="decisions-list">
+
+        <div class="decision-row">
+          <span class="severity-dot sev-high"></span>
+          <span class="decision-brand tag-profinder">Profinder</span>
+          <div class="decision-text">
+            <div class="decision-headline">Paid search CPC up 32% w/w on commercial keywords</div>
+            <div class="decision-detail">Top 5 keywords drove 80% of spend increase · CTR unchanged at 2.1% · suggests competitor bid pressure (likely Vainu re-entry on "B2B prospektering")</div>
+          </div>
+          <button class="action-btn">Review bids</button>
+        </div>
+
+        <div class="decision-row">
+          <span class="severity-dot sev-high"></span>
+          <span class="decision-brand tag-ungapped">Ungapped</span>
+          <div class="decision-text">
+            <div class="decision-headline">Demo→SQL conversion stalled at 38% (target 50%)</div>
+            <div class="decision-detail">Down from 48% Q1 average · pattern: 60% of unqualified demos from public-sector accounts &lt;500 employees · raise score threshold or add pre-demo qualification</div>
+          </div>
+          <button class="action-btn">Diagnose</button>
+        </div>
+
+        <div class="decision-row">
+          <span class="severity-dot sev-med"></span>
+          <span class="decision-brand tag-liana">Liana</span>
+          <div class="decision-text">
+            <div class="decision-headline">NRR slipped to 99% — 1 enterprise account in churn risk</div>
+            <div class="decision-detail">Mainly small-account contraction · one large customer (8% of Liana ARR) flagged red by CSM · expansion pipeline OK at 3.1×</div>
+          </div>
+          <button class="action-btn">Escalate</button>
+        </div>
+
+        <div class="decision-row">
+          <span class="severity-dot sev-pos"></span>
+          <span class="decision-brand tag-profinder">Profinder</span>
+          <div class="decision-text">
+            <div class="decision-headline">FI organic traffic +47% w/w — 3 new keywords in top-3</div>
+            <div class="decision-detail">"yritystiedot API", "B2B prospektidata Suomi", "Vainu vaihtoehto" all hit positions 1–3 · replicate content pattern in NO/SE</div>
+          </div>
+          <button class="action-btn">Investigate</button>
+        </div>
+
+        <div class="decision-row">
+          <span class="severity-dot sev-info"></span>
+          <span class="decision-brand tag-group">Group</span>
+          <div class="decision-text">
+            <div class="decision-headline">Bloodhound campaign live · 6 trigger events this week</div>
+            <div class="decision-detail">3 cross-brand routes converted to demo (Profinder→Liana ×2, Profinder→Ungapped ×1) · first end-to-end loop closes the "Powered by Profinder" thesis</div>
+          </div>
+          <button class="action-btn">View campaign</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- KPI STRIP -->
+    <div class="kpi-strip">
+      <div class="kpi-card">
+        <div class="kpi-label">Pipeline coverage</div>
+        <div class="kpi-value">3.4×</div>
+        <div class="kpi-delta">target ≥ 3.0× · <span class="pos">▲ +0.4 vs Q1</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ARR YTD</div>
+        <div class="kpi-value">21.6 MSEK</div>
+        <div class="kpi-delta">vs plan 22.0 · <span class="neg">98% to plan</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Magic Number</div>
+        <div class="kpi-value">0.82</div>
+        <div class="kpi-delta">target ≥ 0.75 · <span class="pos">▲ healthy</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">CAC Payback</div>
+        <div class="kpi-value">14 mo</div>
+        <div class="kpi-delta">target ≤ 18 mo · <span class="pos">▲ ahead</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Rule of 40</div>
+        <div class="kpi-value">28%</div>
+        <div class="kpi-delta">EMEA median 23–25% · <span class="pos">▲ above</span></div>
+      </div>
+    </div>
+
+    <!-- SOURCED vs INFLUENCED ARR -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Sourced vs Influenced ARR · by brand</div>
+          <div class="card-sub">Sourced = first-touch marketing · Influenced = any-touch in win path · Direct = sales-originated. All sales-validated.</div>
+        </div>
+        <div class="card-meta">YTD · 21.6 MSEK closed-won</div>
+      </div>
+
+      <div class="sourced-row">
+        <div class="sourced-brand">Ungapped</div>
+        <div class="sourced-bar">
+          <div class="sourced-seg" style="width: 38%; background: var(--coral)">Sourced 38%</div>
+          <div class="sourced-seg" style="width: 31%; background: #F39FB1">Influenced 31%</div>
+          <div class="sourced-seg" style="width: 31%; background: #C9C9C9; color: #555">Direct 31%</div>
+        </div>
+        <div>
+          <div class="sourced-total">9.2 MSEK</div>
+          <div class="sourced-total-sub">43% of group</div>
+        </div>
+      </div>
+
+      <div class="sourced-row">
+        <div class="sourced-brand">Profinder</div>
+        <div class="sourced-bar">
+          <div class="sourced-seg" style="width: 52%; background: var(--teal)">Sourced 52%</div>
+          <div class="sourced-seg" style="width: 22%; background: #7BD0D0">Influenced 22%</div>
+          <div class="sourced-seg" style="width: 26%; background: #C9C9C9; color: #555">Direct 26%</div>
+        </div>
+        <div>
+          <div class="sourced-total">4.8 MSEK</div>
+          <div class="sourced-total-sub">22% of group</div>
+        </div>
+      </div>
+
+      <div class="sourced-row">
+        <div class="sourced-brand">Liana</div>
+        <div class="sourced-bar">
+          <div class="sourced-seg" style="width: 18%; background: var(--jungle)">Sourced 18%</div>
+          <div class="sourced-seg" style="width: 27%; background: #6F9C9B">Influenced 27%</div>
+          <div class="sourced-seg" style="width: 55%; background: #C9C9C9; color: #555">Direct 55%</div>
+        </div>
+        <div>
+          <div class="sourced-total">7.6 MSEK</div>
+          <div class="sourced-total-sub">35% of group</div>
+        </div>
+      </div>
+
+      <div class="sourced-legend">
+        <span><strong>Group total:</strong> Sourced 36% · Influenced 27% · Direct 37%</span>
+        <span style="margin-left: auto; color: var(--text-dim)">Marketing-attributed ARR (sourced + influenced) = <strong style="color: var(--text)">63%</strong> of group</span>
+      </div>
+    </div>
+
+    <!-- PER-BRAND STRIP -->
+    <div class="brand-strip">
+
+      <div class="brand-mini-card brand-u">
+        <div class="brand-mini-header">
+          <div class="brand-mini-title">Ungapped</div>
+          <div class="brand-mini-tag">SE · public sector</div>
+        </div>
+        <div class="brand-mini-grid">
+          <div>
+            <div class="mini-label">ARR YTD</div>
+            <div class="mini-value">9.2 MSEK</div>
+            <div class="mini-delta pos">▲ +14%</div>
+          </div>
+          <div>
+            <div class="mini-label">Pipeline cov.</div>
+            <div class="mini-value">3.6×</div>
+            <div class="mini-delta pos">▲ +0.5</div>
+          </div>
+          <div>
+            <div class="mini-label">CAC payback</div>
+            <div class="mini-value">12 mo</div>
+            <div class="mini-delta pos">▲ −2 mo</div>
+          </div>
+        </div>
+        <div class="brand-mini-spark">
+          <div class="brand-mini-spark-label"><span>Pipeline trend · 12w</span><span>+22%</span></div>
+          <svg class="spark-svg" viewBox="0 0 200 32" preserveAspectRatio="none">
+            <polyline fill="none" stroke="#E94B6E" stroke-width="2" points="0,22 18,21 36,20 54,18 72,17 90,15 108,14 126,12 144,11 162,9 180,7 200,5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="brand-mini-card brand-p">
+        <div class="brand-mini-header">
+          <div class="brand-mini-title">Profinder</div>
+          <div class="brand-mini-tag">FI · data + PLG</div>
+        </div>
+        <div class="brand-mini-grid">
+          <div>
+            <div class="mini-label">ARR YTD</div>
+            <div class="mini-value">4.8 MSEK</div>
+            <div class="mini-delta pos">▲ +28%</div>
+          </div>
+          <div>
+            <div class="mini-label">Pipeline cov.</div>
+            <div class="mini-value">4.1×</div>
+            <div class="mini-delta pos">▲ +1.2</div>
+          </div>
+          <div>
+            <div class="mini-label">CAC payback</div>
+            <div class="mini-value">9 mo</div>
+            <div class="mini-delta pos">▲ −3 mo</div>
+          </div>
+        </div>
+        <div class="brand-mini-spark">
+          <div class="brand-mini-spark-label"><span>Pipeline trend · 12w</span><span>+38%</span></div>
+          <svg class="spark-svg" viewBox="0 0 200 32" preserveAspectRatio="none">
+            <polyline fill="none" stroke="#1FB6B6" stroke-width="2" points="0,24 18,22 36,21 54,18 72,17 90,14 108,12 126,10 144,8 162,6 180,4 200,3"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="brand-mini-card brand-l">
+        <div class="brand-mini-header">
+          <div class="brand-mini-title">Liana</div>
+          <div class="brand-mini-tag">FI/EU · mature</div>
+        </div>
+        <div class="brand-mini-grid">
+          <div>
+            <div class="mini-label">ARR YTD</div>
+            <div class="mini-value">7.6 MSEK</div>
+            <div class="mini-delta pos">▲ +4%</div>
+          </div>
+          <div>
+            <div class="mini-label">Pipeline cov.</div>
+            <div class="mini-value">2.8×</div>
+            <div class="mini-delta neg">▼ −0.3</div>
+          </div>
+          <div>
+            <div class="mini-label">CAC payback</div>
+            <div class="mini-value">21 mo</div>
+            <div class="mini-delta neg">▼ +2 mo</div>
+          </div>
+        </div>
+        <div class="brand-mini-spark">
+          <div class="brand-mini-spark-label"><span>Pipeline trend · 12w</span><span>+3%</span></div>
+          <svg class="spark-svg" viewBox="0 0 200 32" preserveAspectRatio="none">
+            <polyline fill="none" stroke="#195B5A" stroke-width="2" points="0,15 18,16 36,15 54,17 72,16 90,15 108,16 126,15 144,14 162,15 180,14 200,13"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SLIM FUNNEL -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Funnel · group rollup</div>
+          <div class="card-sub">One primary count per stage · stage-to-stage conversion · sub-metrics live on brand-level dashboards</div>
+        </div>
+        <div class="card-meta">Last 90 days</div>
+      </div>
+
+      <div class="funnel-stages">
+
+        <div class="funnel-stage">
+          <div class="stage-label">Acquisition</div>
+          <div class="stage-bar-wrap">
+            <div class="stage-bar" style="width: 100%; background: var(--coral);"></div>
+            <span class="stage-bar-value">218k</span>
+            <span class="stage-bar-delta up">▲ +12%</span>
+          </div>
+          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">impressions across paid + organic</span></div>
+          <div class="stage-conv">
+            <span class="stage-conv-rate">5.5%</span>
+            <span class="stage-conv-label">→ sessions</span>
+            <span class="stage-conv-delta up">▲ +0.4%</span>
+          </div>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="stage-label">Sessions</div>
+          <div class="stage-bar-wrap">
+            <div class="stage-bar" style="width: 70%; background: var(--coral);"></div>
+            <span class="stage-bar-value">12,000</span>
+            <span class="stage-bar-delta up">▲ +18%</span>
+          </div>
+          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">unique website sessions, all brands</span></div>
+          <div class="stage-conv">
+            <span class="stage-conv-rate">5.4%</span>
+            <span class="stage-conv-label">→ conversions</span>
+            <span class="stage-conv-delta up">▲ +0.6%</span>
+          </div>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="stage-label">Conversions</div>
+          <div class="stage-bar-wrap">
+            <div class="stage-bar" style="width: 35%; background: var(--coral);"></div>
+            <span class="stage-bar-value">650</span>
+            <span class="stage-bar-delta up">▲ +24%</span>
+          </div>
+          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">demo + signup + content download</span></div>
+          <div class="stage-conv">
+            <span class="stage-conv-rate">28%</span>
+            <span class="stage-conv-label">→ MQL</span>
+            <span class="stage-conv-delta up">▲ +3%</span>
+          </div>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="stage-label">MQLs</div>
+          <div class="stage-bar-wrap">
+            <div class="stage-bar" style="width: 20%; background: var(--coral);"></div>
+            <span class="stage-bar-value">182</span>
+            <span class="stage-bar-delta up">▲ +28%</span>
+          </div>
+          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">lead-score ≥ 60 · sales-validated</span></div>
+          <div class="stage-conv">
+            <span class="stage-conv-rate">48%</span>
+            <span class="stage-conv-label">→ SQL</span>
+            <span class="stage-conv-delta up">▲ +3%</span>
+          </div>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="stage-label">SQLs</div>
+          <div class="stage-bar-wrap">
+            <div class="stage-bar" style="width: 10%; background: var(--coral);"></div>
+            <span class="stage-bar-value">87</span>
+            <span class="stage-bar-delta up">▲ +14%</span>
+          </div>
+          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">accepted by sales · in active pipeline</span></div>
+          <div class="stage-conv">
+            <span class="stage-conv-rate">25%</span>
+            <span class="stage-conv-label">→ won</span>
+            <span class="stage-conv-delta up">▲ +3%</span>
+          </div>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="stage-label">Closed won</div>
+          <div class="stage-bar-wrap">
+            <div class="stage-bar" style="width: 4%; background: var(--coral);"></div>
+            <span class="stage-bar-value">22</span>
+            <span class="stage-bar-delta up">▲ +18%</span>
+          </div>
+          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">21.6 MSEK ARR · avg ACV 980 kSEK</span></div>
+          <div class="stage-conv">
+            <span class="stage-conv-rate">—</span>
+            <span class="stage-conv-label">end</span>
+            <span class="stage-conv-delta">&nbsp;</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /tab-executive -->
+
+  <!-- Footer -->
+  <div class="footer-meta">
+    <div class="left">
+      <span>Last refresh: 2 minutes ago</span>
+      <span>•</span>
+      <span>Sources: Pipedrive · Supermetrics · GA4 · Hotjar · Snitcher</span>
+      <span>•</span>
+      <span>* Granularity applies to bar chart + time series · funnel always cumulative</span>
+    </div>
+    <div>
+      <span style="font-weight:600">Group Marketing · Erik Oliva Werner</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var target = tab.dataset.target;
+      document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+      tab.classList.add('active');
+      document.getElementById(target).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

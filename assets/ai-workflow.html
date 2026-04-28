@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Workflow — Customer Case Production</title>
+<style>
+:root {
+  --coral: #E94B6E;
+  --coral-soft: #FCE5EA;
+  --teal: #1FB6B6;
+  --teal-soft: #E5F7F7;
+  --jungle: #195B5A;
+  --jungle-soft: #C8E0DF;
+  --alabaster: #F7F4E8;
+  --bg: #F8F8F8;
+  --card-bg: #FFFFFF;
+  --border: #E5E5E5;
+  --text: #1A1A1A;
+  --text-mid: #6B6B6B;
+  --text-dim: #9B9B9B;
+  --green: #1FB667;
+  --yellow-pill: #F9D85A;
+  --purple: #6B5DD3;
+  --purple-soft: #EBE7FA;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Open Sans', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 32px;
+}
+
+.slide {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  padding: 48px 56px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  border: 1px solid var(--border);
+}
+
+/* Header */
+.slide-header {
+  margin-bottom: 32px;
+}
+
+.slide-pill {
+  display: inline-block;
+  background: var(--purple-soft);
+  color: var(--purple);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.slide-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.slide-title .accent {
+  color: var(--purple);
+}
+
+.slide-sub {
+  font-size: 16px;
+  color: var(--text-mid);
+  max-width: 800px;
+}
+
+/* Two-track layout */
+.tracks {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 28px;
+  margin: 32px 0;
+}
+
+/* Pipeline track (left) */
+.pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pipeline-step {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  position: relative;
+  transition: all 0.15s;
+}
+
+.pipeline-step:hover {
+  border-color: var(--text);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.pipeline-step.ai {
+  background: linear-gradient(90deg, var(--purple-soft) 0%, white 60%);
+  border-color: var(--purple);
+}
+
+.pipeline-step.human {
+  background: linear-gradient(90deg, var(--coral-soft) 0%, white 60%);
+  border-color: var(--coral);
+}
+
+.pipeline-step.amplify {
+  background: linear-gradient(90deg, var(--teal-soft) 0%, white 60%);
+  border-color: var(--teal);
+}
+
+/* Connector arrow between steps */
+.pipeline-step::after {
+  content: "↓";
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-dim);
+  font-size: 14px;
+  z-index: 2;
+}
+
+.pipeline-step:last-child::after { display: none; }
+
+.step-num-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.step-num-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pipeline-step.ai .step-num-circle { border-color: var(--purple); color: var(--purple); }
+.pipeline-step.human .step-num-circle { border-color: var(--coral); color: var(--coral); }
+.pipeline-step.amplify .step-num-circle { border-color: var(--teal); color: var(--teal); }
+
+.step-tag {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-top: 2px;
+}
+
+.pipeline-step.ai .step-tag { background: var(--purple); color: white; }
+.pipeline-step.human .step-tag { background: var(--coral); color: white; }
+.pipeline-step.amplify .step-tag { background: var(--teal); color: white; }
+
+.step-content-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.step-content-body {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+
+.step-tools {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: 'SF Mono', Monaco, monospace;
+}
+
+.step-tools .tool {
+  display: inline-block;
+  background: var(--bg);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: 4px;
+  margin-top: 2px;
+}
+
+.step-time {
+  text-align: right;
+  font-size: 11px;
+  color: var(--text-mid);
+  line-height: 1.4;
+}
+
+.step-time .duration {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Sidebar (right): metrics + principle */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.metric-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.metric-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-mid);
+  margin-bottom: 6px;
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.metric-context {
+  font-size: 11px;
+  color: var(--text-mid);
+}
+
+.metric-card.featured {
+  background: var(--jungle);
+  color: white;
+  border: none;
+}
+
+.metric-card.featured .metric-label { color: rgba(255,255,255,0.7); }
+.metric-card.featured .metric-value { color: var(--yellow-pill); }
+.metric-card.featured .metric-context { color: rgba(255,255,255,0.85); }
+
+/* Output explosion (bottom) */
+.derivatives {
+  margin-top: 32px;
+}
+
+.derivatives-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-mid);
+  margin-bottom: 14px;
+}
+
+.derivatives-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.deriv-item {
+  background: var(--alabaster);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 12px;
+  text-align: center;
+}
+
+.deriv-icon {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.deriv-name {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.deriv-detail {
+  font-size: 10px;
+  color: var(--text-mid);
+}
+
+/* Principles strip */
+.principles {
+  margin-top: 32px;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, var(--purple-soft) 0%, var(--coral-soft) 100%);
+  border-radius: 14px;
+}
+
+.principles-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-mid);
+  margin-bottom: 12px;
+}
+
+.principles-quote {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.principles-quote .highlight {
+  background: var(--yellow-pill);
+  padding: 0 6px;
+}
+
+/* Anti-patterns box */
+.anti-patterns {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.anti-box {
+  padding: 18px 22px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.anti-box .anti-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.anti-box.do { background: #E5F7EE; border-left: 3px solid var(--green); }
+.anti-box.do .anti-title { color: var(--green); }
+
+.anti-box.dont { background: var(--coral-soft); border-left: 3px solid var(--coral); }
+.anti-box.dont .anti-title { color: var(--coral); }
+
+.anti-box ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.anti-box li {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+/* Footer */
+.slide-footer {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+@media (max-width: 1100px) {
+  .tracks { grid-template-columns: 1fr; }
+  .derivatives-grid { grid-template-columns: repeat(3, 1fr); }
+  .anti-patterns { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- Header -->
+  <div class="slide-header">
+    <span class="slide-pill">🤖 Stand-out element · AI workflow in practice</span>
+    <h1 class="slide-title">Customer case production: <span class="accent">3 weeks → 3 days,</span> 90% time saved</h1>
+    <p class="slide-sub">A workflow I've built and run before. Sales call goes in. Polished, brand-voiced, multi-format case study comes out — with human judgement at the points it matters most.</p>
+  </div>
+
+  <!-- Pipeline + sidebar -->
+  <div class="tracks">
+
+    <!-- Pipeline -->
+    <div class="pipeline">
+
+      <div class="pipeline-step human">
+        <div class="step-num-wrap">
+          <div class="step-num-circle">1</div>
+          <div class="step-tag">Human</div>
+        </div>
+        <div>
+          <div class="step-content-title">📞 Sales call recorded (with customer consent)</div>
+          <div class="step-content-body">CSM or AE has 30-min customer interview. Standard script, brand-tailored. Recording saved.</div>
+          <div class="step-tools">
+            <span class="tool">Otter</span><span class="tool">Fireflies</span><span class="tool">Zoom</span>
+          </div>
+        </div>
+        <div class="step-time"><div class="duration">30 min</div>customer time</div>
+      </div>
+
+      <div class="pipeline-step ai">
+        <div class="step-num-wrap">
+          <div class="step-num-circle">2</div>
+          <div class="step-tag">AI</div>
+        </div>
+        <div>
+          <div class="step-content-title">📝 Auto-transcription + initial extraction</div>
+          <div class="step-content-body">Transcript generated automatically. Claude pulls quotes, metrics, key moments. Tags by case-study-section.</div>
+          <div class="step-tools">
+            <span class="tool">Otter/Fireflies → text</span><span class="tool">Claude · extraction prompt</span>
+          </div>
+        </div>
+        <div class="step-time"><div class="duration">10 min</div>auto-process</div>
+      </div>
+
+      <div class="pipeline-step ai">
+        <div class="step-num-wrap">
+          <div class="step-num-circle">3</div>
+          <div class="step-tag">AI</div>
+        </div>
+        <div>
+          <div class="step-content-title">✍️ Draft generated in brand-voice</div>
+          <div class="step-content-body">Claude drafts case-study using brand voice-guide + extracted material. Output: 4-section structure (challenge / solution / results / quote).</div>
+          <div class="step-tools">
+            <span class="tool">Claude · case-study prompt</span><span class="tool">Notion brand-voice context</span>
+          </div>
+        </div>
+        <div class="step-time"><div class="duration">15 min</div>auto-draft</div>
+      </div>
+
+      <div class="pipeline-step human">
+        <div class="step-num-wrap">
+          <div class="step-num-circle">4</div>
+          <div class="step-tag">Human</div>
+        </div>
+        <div>
+          <div class="step-content-title">👁️ Editor refinement (judgement, taste, accuracy)</div>
+          <div class="step-content-body">Storyteller-persona reviews: brand-voice fidelity, factual accuracy, emotional resonance. Adds human nuance AI can't generate.</div>
+          <div class="step-tools">
+            <span class="tool">Notion editor</span><span class="tool">Claude · refinement prompt</span>
+          </div>
+        </div>
+        <div class="step-time"><div class="duration">45 min</div>human craft</div>
+      </div>
+
+      <div class="pipeline-step human">
+        <div class="step-num-wrap">
+          <div class="step-num-circle">5</div>
+          <div class="step-tag">Human</div>
+        </div>
+        <div>
+          <div class="step-content-title">🎨 Designer adds visuals (template-driven)</div>
+          <div class="step-content-body">Designer-persona pulls customer logo + applies case-study-template. Quote-card + result-stat-cards generated.</div>
+          <div class="step-tools">
+            <span class="tool">Figma + MagicPattern</span><span class="tool">Brand template-bibliotek</span>
+          </div>
+        </div>
+        <div class="step-time"><div class="duration">30 min</div>visual</div>
+      </div>
+
+      <div class="pipeline-step amplify">
+        <div class="step-num-wrap">
+          <div class="step-num-circle">6</div>
+          <div class="step-tag">Amplify</div>
+        </div>
+        <div>
+          <div class="step-content-title">🚀 Publish + derive (one case → many assets)</div>
+          <div class="step-content-body">Pillar case-study live on website. AI generates 5–10 derivative pieces (LinkedIn posts, sales talking points, blog version, video script, email).</div>
+          <div class="step-tools">
+            <span class="tool">CMS</span><span class="tool">Claude · derivative-generation prompts</span>
+          </div>
+        </div>
+        <div class="step-time"><div class="duration">60 min</div>publish</div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="metric-card featured">
+        <div class="metric-label">Total time</div>
+        <div class="metric-value">~3 hrs</div>
+        <div class="metric-context">vs 3 weeks traditional production. 90% time saved.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Output multiplier</div>
+        <div class="metric-value">5–10×</div>
+        <div class="metric-context">derivative pieces per pillar case</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Cadence achievable</div>
+        <div class="metric-value">2/mo</div>
+        <div class="metric-context">per brand, with existing team</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">SEO impact (per case)</div>
+        <div class="metric-value">~20</div>
+        <div class="metric-context">long-tail keywords ranked over 6 mo</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Output derivatives -->
+  <div class="derivatives">
+    <div class="derivatives-title">One case becomes 5–10 derivative pieces (parallel AI generation)</div>
+    <div class="derivatives-grid">
+      <div class="deriv-item">
+        <div class="deriv-icon">📄</div>
+        <div class="deriv-name">Pillar case study</div>
+        <div class="deriv-detail">website + PDF</div>
+      </div>
+      <div class="deriv-item">
+        <div class="deriv-icon">💼</div>
+        <div class="deriv-name">LinkedIn posts ×3</div>
+        <div class="deriv-detail">brand + thought-leader</div>
+      </div>
+      <div class="deriv-item">
+        <div class="deriv-icon">🎯</div>
+        <div class="deriv-name">Sales talking points</div>
+        <div class="deriv-detail">battle-card format</div>
+      </div>
+      <div class="deriv-item">
+        <div class="deriv-icon">📧</div>
+        <div class="deriv-name">Email sequence</div>
+        <div class="deriv-detail">nurture flow segment</div>
+      </div>
+      <div class="deriv-item">
+        <div class="deriv-icon">🎬</div>
+        <div class="deriv-name">Video script</div>
+        <div class="deriv-detail">60-sec testimonial</div>
+      </div>
+      <div class="deriv-item">
+        <div class="deriv-icon">🎙️</div>
+        <div class="deriv-name">Podcast clip</div>
+        <div class="deriv-detail">if guest available</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Principles -->
+  <div class="principles">
+    <div class="principles-title">The principle behind this workflow</div>
+    <div class="principles-quote">
+      Human creativity in. Human judgement out. <span class="highlight">AI handles repetition, variation, acceleration.</span> Humans define direction, quality, taste. <strong>AI should not replace thinking — it should amplify it.</strong>
+    </div>
+  </div>
+
+  <!-- Do / Don't -->
+  <div class="anti-patterns">
+    <div class="anti-box do">
+      <div class="anti-title">✓ What this workflow does well</div>
+      <ul>
+        <li>• Removes 90% of mechanical work (transcription, structuring, drafting)</li>
+        <li>• Human review at the <em>right</em> step (editor stage 4 + design stage 5)</li>
+        <li>• Brand-voice context lives in Notion → Claude pulls it consistently</li>
+        <li>• One pillar case becomes 5–10 derivatives without re-work</li>
+      </ul>
+    </div>
+    <div class="anti-box dont">
+      <div class="anti-title">✗ Anti-patterns I refuse to ship</div>
+      <ul>
+        <li>• Publishing AI drafts without human editorial pass</li>
+        <li>• Generic "case study" template that ignores customer specificity</li>
+        <li>• Skipping the customer call to "save time" — the soul lives in the conversation</li>
+        <li>• Treating transcript as truth — AI hallucinates; editor catches</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="slide-footer">
+    <div>AI workflow · Customer case production · Tested at Funnel, Refapp, Leadfeeder/Dealfront</div>
+    <div>Erik Oliva Werner · Group CMO candidate</div>
+  </div>
+
+</div>
+
+</body>
+</html>

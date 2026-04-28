@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workflow — Daily Performance Digest to Slack</title>
+<style>
+:root {
+  --coral: #E94B6E;
+  --coral-soft: #FCE5EA;
+  --teal: #1FB6B6;
+  --teal-soft: #E5F7F7;
+  --jungle: #195B5A;
+  --jungle-soft: #C8E0DF;
+  --alabaster: #F7F4E8;
+  --bg: #F8F8F8;
+  --card-bg: #FFFFFF;
+  --border: #E5E5E5;
+  --text: #1A1A1A;
+  --text-mid: #6B6B6B;
+  --text-dim: #9B9B9B;
+  --green: #1FB667;
+  --red: #E94B6E;
+  --amber: #F9B250;
+  --yellow-pill: #F9D85A;
+  --purple: #6B5DD3;
+  --purple-soft: #EBE7FA;
+  --slack-bg: #1A1D21;
+  --slack-text: #D1D2D3;
+  --slack-sidebar: #19171D;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Open Sans', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 32px;
+}
+
+.slide {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  padding: 48px 56px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  border: 1px solid var(--border);
+}
+
+/* Header */
+.slide-header { margin-bottom: 32px; }
+
+.slide-pill {
+  display: inline-block;
+  background: var(--purple-soft);
+  color: var(--purple);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.slide-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.slide-title .accent { color: var(--purple); }
+
+.slide-sub {
+  font-size: 16px;
+  color: var(--text-mid);
+  max-width: 880px;
+}
+
+/* Architecture diagram */
+/* === ARCHITECTURE (n8n canvas flowchart) === */
+.architecture {
+  margin: 28px 0;
+}
+
+.arch-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.arch-caption {
+  font-size: 12px;
+  color: var(--text-mid);
+  text-align: center;
+  margin-top: 10px;
+  padding: 0 16px;
+  line-height: 1.5;
+}
+
+/* Two-column body: flow steps + Slack mockup */
+.body-grid {
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  gap: 32px;
+  margin-top: 32px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+/* Flow steps (left column) */
+.flow-steps { display: flex; flex-direction: column; gap: 10px; }
+
+.flow-step {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  position: relative;
+}
+
+.flow-step::after {
+  content: "↓";
+  position: absolute;
+  bottom: -12px;
+  left: 32px;
+  color: var(--text-dim);
+  font-size: 12px;
+  z-index: 2;
+  background: var(--bg);
+  width: 14px;
+  text-align: center;
+}
+
+.flow-step:last-child::after { display: none; }
+
+.flow-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--purple);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.flow-content-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.flow-content-body {
+  font-size: 11.5px;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+
+.flow-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 6px;
+  background: var(--purple-soft);
+  color: var(--purple);
+}
+
+.flow-tag.cron { background: #FFF1E6; color: #C7682B; }
+.flow-tag.mcp { background: var(--teal-soft); color: var(--teal); }
+.flow-tag.claude { background: var(--purple-soft); color: var(--purple); }
+.flow-tag.slack { background: #F5EFF6; color: #4A154B; }
+
+/* Slack mockup (right column) */
+.slack-mockup {
+  background: var(--slack-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  font-family: 'Lato', 'Open Sans', system-ui, sans-serif;
+  color: var(--slack-text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.slack-header {
+  background: var(--slack-sidebar);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #2C2D30;
+}
+
+.slack-channel-name {
+  font-weight: 700;
+  color: white;
+  font-size: 14px;
+}
+
+.slack-channel-meta {
+  font-size: 11px;
+  color: #ABABAD;
+  margin-left: auto;
+}
+
+.slack-msg-list {
+  padding: 16px 18px 18px;
+  max-height: 720px;
+  overflow-y: auto;
+}
+
+.slack-msg {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.slack-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--coral) 0%, var(--purple) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.slack-msg-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.slack-bot-name {
+  font-weight: 700;
+  color: white;
+  font-size: 14px;
+}
+
+.slack-bot-tag {
+  background: #5F6063;
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.slack-time {
+  font-size: 11px;
+  color: #9C9C9E;
+}
+
+.slack-msg-body { font-size: 13px; }
+
+.slack-msg-body strong { color: white; font-weight: 700; }
+
+.slack-section {
+  margin: 14px 0 10px;
+  padding-top: 12px;
+  border-top: 1px solid #2C2D30;
+}
+.slack-section:first-child { margin-top: 8px; padding-top: 0; border-top: none; }
+
+.slack-section-head {
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 6px;
+}
+
+.slack-bullet {
+  margin-left: 4px;
+  margin-bottom: 3px;
+  font-size: 12.5px;
+}
+
+.slack-sub-bullet {
+  margin-left: 22px;
+  font-size: 12px;
+  color: #B7B8B9;
+  margin-bottom: 2px;
+}
+
+.slack-divider {
+  margin: 8px 0 6px;
+  height: 1px;
+  background: #2C2D30;
+}
+
+.slack-summary {
+  font-size: 12px;
+  color: #B7B8B9;
+  margin-top: 4px;
+}
+
+.slack-summary .pos { color: #2EB67D; font-weight: 700; }
+.slack-summary .neg { color: #E01E5A; font-weight: 700; }
+
+.slack-flag {
+  background: #2D1A1F;
+  border-left: 3px solid var(--coral);
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.slack-flag .flag-brand {
+  font-weight: 700;
+  color: white;
+  font-size: 11px;
+  margin-right: 6px;
+}
+
+.slack-cta {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #2C2D30;
+  display: flex;
+  gap: 8px;
+}
+
+.slack-btn {
+  background: #2C2D30;
+  color: var(--slack-text);
+  border: 1px solid #3F4146;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.slack-btn.primary {
+  background: #007A5A;
+  border-color: #007A5A;
+  color: white;
+}
+
+/* Why this matters strip */
+.why-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.why-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  border-top: 3px solid var(--purple);
+}
+
+.why-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--purple);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.why-headline {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+
+.why-detail {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+
+/* Tech stack footer */
+.tech-strip {
+  margin-top: 28px;
+  padding: 18px 22px;
+  background: var(--alabaster);
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+.tech-cell { font-size: 12px; }
+.tech-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.tech-value { font-weight: 600; color: var(--text); }
+.tech-sub { font-size: 11px; color: var(--text-mid); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- HEADER -->
+  <div class="slide-header">
+    <div class="slide-pill">AI Workflow · Stand-out Element</div>
+    <div class="slide-title">Daily Performance Digest <span class="accent">to Slack</span></div>
+    <div class="slide-sub">
+      Same data the Group Marketing dashboard pulls — but <strong>pushed</strong> to where work happens at 08:00 every morning. Five MCP-connected sources, n8n orchestration, Claude as the synthesis layer. Costs ~5 SEK/day in API calls and saves the 12-minute morning data-pull ritual across the team.
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE — n8n canvas flowchart -->
+  <div class="architecture">
+    <svg class="arch-svg" viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
+
+      <defs>
+        <filter id="card-shadow-d" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-opacity="0.15"/>
+        </filter>
+        <filter id="bubble-shadow-d" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="1" stdDeviation="1.8" flood-opacity="0.18"/>
+        </filter>
+
+        <marker id="arr-white-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0 0 L10 5 L0 10 z" fill="#fff"/>
+        </marker>
+
+        <!-- Logo symbols -->
+        <symbol id="i-clock-d" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="#333" stroke-width="2"/>
+          <line x1="12" y1="12" x2="12" y2="6.5" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+          <line x1="12" y1="12" x2="16.2" y2="14" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+
+        <symbol id="i-robot-d" viewBox="0 0 24 24">
+          <circle cx="12" cy="3.6" r="1.3" fill="#2D2D2D"/>
+          <line x1="12" y1="4.9" x2="12" y2="7" stroke="#2D2D2D" stroke-width="1.5"/>
+          <rect x="5" y="7" width="14" height="13" rx="3" fill="none" stroke="#2D2D2D" stroke-width="1.5"/>
+          <circle cx="9.5" cy="12" r="1.4" fill="#2D2D2D"/>
+          <circle cx="14.5" cy="12" r="1.4" fill="#2D2D2D"/>
+          <line x1="9.5" y1="16" x2="14.5" y2="16" stroke="#2D2D2D" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="2.5" y1="12" x2="5" y2="12" stroke="#2D2D2D" stroke-width="1.5"/>
+          <line x1="19" y1="12" x2="21.5" y2="12" stroke="#2D2D2D" stroke-width="1.5"/>
+        </symbol>
+
+        <symbol id="i-claude-d" viewBox="0 0 24 24">
+          <rect width="24" height="24" rx="3" fill="#191919"/>
+          <g transform="translate(12 12)" fill="#D97757">
+            <rect x="-1" y="-8.5" width="2" height="17" rx="1"/>
+            <rect x="-8.5" y="-1" width="17" height="2" rx="1"/>
+            <rect x="-1" y="-8.5" width="2" height="17" rx="1" transform="rotate(45)"/>
+            <rect x="-8.5" y="-1" width="17" height="2" rx="1" transform="rotate(45)"/>
+          </g>
+        </symbol>
+
+        <symbol id="i-slack-d" viewBox="0 0 24 24">
+          <path d="M5.5 15a1.5 1.5 0 100 3 1.5 1.5 0 001.5-1.5V15H5.5z" fill="#E01E5A"/>
+          <path d="M6.3 15a1.5 1.5 0 113 0v3.5a1.5 1.5 0 11-3 0V15z" fill="#E01E5A"/>
+          <path d="M9 8.5a1.5 1.5 0 11-3 0 1.5 1.5 0 011.5-1.5H9v1.5z" fill="#36C5F0"/>
+          <path d="M9 9.3a1.5 1.5 0 010 3H5.5a1.5 1.5 0 010-3H9z" fill="#36C5F0"/>
+          <path d="M15 9.3a1.5 1.5 0 113 0 1.5 1.5 0 01-1.5 1.5H15V9.3z" fill="#2EB67D"/>
+          <path d="M14.2 9.3a1.5 1.5 0 11-3 0V5.5a1.5 1.5 0 113 0v3.8z" fill="#2EB67D"/>
+          <path d="M14.2 15.5a1.5 1.5 0 113 0 1.5 1.5 0 01-1.5 1.5h-1.5v-1.5z" fill="#ECB22E"/>
+          <path d="M14.2 14.7a1.5 1.5 0 010-3H18a1.5 1.5 0 010 3h-3.8z" fill="#ECB22E"/>
+        </symbol>
+
+        <symbol id="i-googleads-d" viewBox="0 0 24 24">
+          <path d="M9.5 2.5L2 15.5l3 5.2L13 7z" fill="#FBBC04"/>
+          <path d="M14.5 2.5L22 15.5l-3 5.2L11 7z" fill="#4285F4"/>
+          <circle cx="6.5" cy="20.7" r="3" fill="#34A853"/>
+        </symbol>
+
+        <symbol id="i-ga4-d" viewBox="0 0 24 24">
+          <rect x="17" y="2" width="5" height="20" rx="2.5" fill="#F9AB00"/>
+          <rect x="9.5" y="9" width="5" height="13" rx="2.5" fill="#E37400"/>
+          <circle cx="4" cy="20" r="2.5" fill="#E37400"/>
+        </symbol>
+
+        <symbol id="i-linkedin-d" viewBox="0 0 24 24">
+          <rect width="24" height="24" rx="3" fill="#0A66C2"/>
+          <rect x="5" y="9.5" width="3" height="9.5" fill="white"/>
+          <circle cx="6.5" cy="6.4" r="1.7" fill="white"/>
+          <path d="M10.4 9.5h2.8v1.4c.5-.9 1.6-1.6 3-1.6 2.2 0 3.5 1.4 3.5 3.9V19H17V13.7c0-1.2-.5-2-1.5-2s-1.7.7-1.7 2V19h-3.4V9.5z" fill="white"/>
+        </symbol>
+
+        <symbol id="i-meta-d" viewBox="0 0 24 24">
+          <defs>
+            <linearGradient id="meta-d-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0064E1"/>
+              <stop offset="100%" stop-color="#00C6FF"/>
+            </linearGradient>
+          </defs>
+          <path d="M3 12c0-3 1.5-5 3.8-5 2 0 3.5 1.4 5.2 4.2 1.7-2.8 3.2-4.2 5.2-4.2 2.3 0 3.8 2 3.8 5s-1.5 5-3.8 5c-2 0-3.5-1.4-5.2-4.2-1.7 2.8-3.2 4.2-5.2 4.2-2.3 0-3.8-2-3.8-5z" fill="none" stroke="url(#meta-d-grad)" stroke-width="2.6" stroke-linecap="round"/>
+        </symbol>
+
+        <symbol id="i-pipedrive-d" viewBox="0 0 24 24">
+          <rect width="24" height="24" rx="3" fill="#000"/>
+          <path d="M9 5.5h5.3c2.6 0 4.4 1.8 4.4 4.4s-1.8 4.4-4.4 4.4h-2.4v4.7H9V5.5zm2.9 6.4h2.3c1 0 1.6-.6 1.6-1.5s-.6-1.5-1.6-1.5h-2.3v3z" fill="#23C16B"/>
+        </symbol>
+
+        <symbol id="i-mcp-d" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="6.8" fill="none" stroke="#1FB6B6" stroke-width="2.4"/>
+          <line x1="15.5" y1="15.5" x2="20.5" y2="20.5" stroke="#1FB6B6" stroke-width="2.4" stroke-linecap="round"/>
+        </symbol>
+
+        <symbol id="i-n8n-brand-d" viewBox="0 0 24 24">
+          <line x1="6" y1="12" x2="18" y2="12" stroke="#EA4B71" stroke-width="2"/>
+          <line x1="12" y1="6" x2="12" y2="18" stroke="#EA4B71" stroke-width="2"/>
+          <circle cx="6" cy="12" r="3" fill="#EA4B71"/>
+          <circle cx="12" cy="6" r="2.5" fill="#EA4B71"/>
+          <circle cx="12" cy="18" r="2.5" fill="#EA4B71"/>
+          <circle cx="18" cy="12" r="3" fill="#EA4B71"/>
+        </symbol>
+      </defs>
+
+      <!-- n8n canvas background -->
+      <rect width="1000" height="360" rx="14" fill="#DDD0EC"/>
+
+      <!-- n8n brand top-left -->
+      <use href="#i-n8n-brand-d" x="22" y="22" width="26" height="26"/>
+      <text x="56" y="42" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="700" fill="#2D2D2D">n8n</text>
+
+      <!-- ===== TOP ROW: Schedule → AI Workflow → Slack ===== -->
+
+      <!-- Schedule -->
+      <g filter="url(#card-shadow-d)">
+        <rect x="180" y="80" width="80" height="80" rx="10" fill="white"/>
+      </g>
+      <use href="#i-clock-d" x="200" y="100" width="40" height="40"/>
+      <text x="220" y="180" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="#2D2D2D">Schedule</text>
+      <text x="220" y="194" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#5A5A5A">08:00 daily</text>
+
+      <!-- Arrow Schedule → AI Workflow -->
+      <path d="M265 120 L420 120" stroke="white" stroke-width="2.5" fill="none" marker-end="url(#arr-white-d)"/>
+
+      <!-- AI Workflow -->
+      <g filter="url(#card-shadow-d)">
+        <rect x="430" y="75" width="120" height="90" rx="10" fill="white" stroke="#EA4B71" stroke-width="2"/>
+      </g>
+      <use href="#i-robot-d" x="470" y="100" width="40" height="40"/>
+      <text x="490" y="185" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="#2D2D2D">AI Workflow</text>
+      <text x="490" y="199" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#5A5A5A">interpret + flag</text>
+
+      <!-- Arrow AI Workflow → Slack -->
+      <path d="M555 120 L710 120" stroke="white" stroke-width="2.5" fill="none" marker-end="url(#arr-white-d)"/>
+
+      <!-- Slack -->
+      <g filter="url(#card-shadow-d)">
+        <rect x="720" y="80" width="80" height="80" rx="10" fill="white"/>
+      </g>
+      <use href="#i-slack-d" x="740" y="100" width="40" height="40"/>
+      <text x="760" y="180" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="#2D2D2D">Slack</text>
+      <text x="760" y="194" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#5A5A5A">+ DM to CMO</text>
+
+      <!-- ===== BOTTOM ROW: Chat Model + MCP Server ===== -->
+
+      <!-- Chat Model (Claude) -->
+      <g filter="url(#card-shadow-d)">
+        <rect x="350" y="220" width="80" height="80" rx="10" fill="white"/>
+      </g>
+      <use href="#i-claude-d" x="370" y="240" width="40" height="40"/>
+      <text x="390" y="316" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="#2D2D2D">Chat Model</text>
+      <text x="390" y="330" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#5A5A5A">Claude Sonnet</text>
+
+      <!-- Arrow Claude → AI Workflow -->
+      <path d="M425 222 Q450 195 470 168" stroke="white" stroke-width="2.5" fill="none" marker-end="url(#arr-white-d)"/>
+
+      <!-- MCP Server -->
+      <g filter="url(#card-shadow-d)">
+        <rect x="555" y="220" width="80" height="80" rx="10" fill="white"/>
+      </g>
+      <use href="#i-mcp-d" x="575" y="240" width="40" height="40"/>
+      <text x="595" y="316" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="#2D2D2D">MCP Server</text>
+      <text x="595" y="330" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#5A5A5A">5 sources</text>
+
+      <!-- Arrow MCP → AI Workflow -->
+      <path d="M560 222 Q535 195 515 168" stroke="white" stroke-width="2.5" fill="none" marker-end="url(#arr-white-d)"/>
+
+      <!-- Floating logo bubbles around MCP Server (5 sources) -->
+      <g filter="url(#bubble-shadow-d)"><circle cx="660" cy="218" r="17" fill="white"/></g>
+      <use href="#i-googleads-d" x="649" y="207" width="22" height="22"/>
+
+      <g filter="url(#bubble-shadow-d)"><circle cx="685" cy="245" r="17" fill="white"/></g>
+      <use href="#i-ga4-d" x="674" y="234" width="22" height="22"/>
+
+      <g filter="url(#bubble-shadow-d)"><circle cx="695" cy="278" r="17" fill="white"/></g>
+      <use href="#i-linkedin-d" x="684" y="267" width="22" height="22"/>
+
+      <g filter="url(#bubble-shadow-d)"><circle cx="685" cy="310" r="17" fill="white"/></g>
+      <use href="#i-meta-d" x="674" y="299" width="22" height="22"/>
+
+      <g filter="url(#bubble-shadow-d)"><circle cx="660" cy="335" r="17" fill="white"/></g>
+      <use href="#i-pipedrive-d" x="649" y="324" width="22" height="22"/>
+
+    </svg>
+    <div class="arch-caption">
+      Schedule trigger fires 08:00 daily → AI Workflow runs against 5 paid + analytics sources via MCP, with Claude as the LLM → digest posted to <strong>#group-marketing</strong> + DM to CMO with interactive buttons.
+    </div>
+  </div>
+
+  <!-- BODY: Flow steps + Slack mockup -->
+  <div class="body-grid">
+
+    <!-- LEFT: Flow steps -->
+    <div>
+      <div class="section-title">Daily flow · 08:00 every morning</div>
+      <div class="flow-steps">
+
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div>
+            <div class="flow-content-title"><span class="flow-tag cron">Cron</span> n8n trigger fires at 08:00 CET</div>
+            <div class="flow-content-body">Single workflow run · no manual intervention. Workflow runs in &lt;90 seconds end-to-end. If any source fails the digest still ships with a fallback note.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div>
+            <div class="flow-content-title"><span class="flow-tag mcp">MCP</span> Parallel fetch from 5 sources</div>
+            <div class="flow-content-body">Each MCP returns yesterday's data scoped to the group's accounts. Brand mapping happens via a lookup table (campaign-name regex → brand). Currency normalized to SEK.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div>
+            <div class="flow-content-title"><span class="flow-tag claude">Claude</span> Synthesis with 7-day context</div>
+            <div class="flow-content-body">Claude receives normalized data + last 7 daily digests as context. Computes deltas vs prior day and 7-day avg. Detects anomalies (CTR drop, CPC spike, conversion gap) and writes flags in plain language.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div>
+            <div class="flow-content-title"><span class="flow-tag claude">Claude</span> Format as Slack Block Kit</div>
+            <div class="flow-content-body">Claude outputs structured JSON matching Slack's Block Kit schema · sections, bullet lists, dividers, action buttons. No regex post-processing — schema is enforced via a tool definition.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div>
+            <div class="flow-content-title"><span class="flow-tag slack">Slack</span> Post to #group-marketing + DM to CMO</div>
+            <div class="flow-content-body">Channel post for transparency, DM for the CMO so it shows up in personal feed. Buttons trigger sub-workflows: "Open dashboard", "Diagnose flag", "Snooze tomorrow's digest".</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: Slack mockup -->
+    <div>
+      <div class="section-title">What Erik sees at 08:00</div>
+      <div class="slack-mockup">
+        <div class="slack-header">
+          <span style="color: white;">#</span>
+          <span class="slack-channel-name">group-marketing</span>
+          <span class="slack-channel-meta">12 members · daily digest</span>
+        </div>
+
+        <div class="slack-msg-list">
+          <div class="slack-msg">
+            <div class="slack-avatar">G</div>
+            <div>
+              <div class="slack-msg-head">
+                <span class="slack-bot-name">Group Digest Bot</span>
+                <span class="slack-bot-tag">App</span>
+                <span class="slack-time">08:01</span>
+              </div>
+              <div class="slack-msg-body">
+                <strong>Good morning! Here's yesterday's group performance — Mon Apr 26</strong>
+
+                <!-- PAID SPEND -->
+                <div class="slack-section">
+                  <div class="slack-section-head">💰 Paid spend · yesterday</div>
+                  <div class="slack-bullet"><strong>Google Ads:</strong> 12,400 SEK</div>
+                  <div class="slack-sub-bullet">└ Liana 4,800 · Profinder 5,200 · Ungapped 2,400</div>
+                  <div class="slack-bullet"><strong>LinkedIn Ads:</strong> 8,200 SEK</div>
+                  <div class="slack-sub-bullet">└ Liana 3,600 · Profinder 1,800 · Ungapped 2,800</div>
+                  <div class="slack-bullet"><strong>Meta Ads:</strong> 1,400 SEK <span style="color: #9C9C9E;">(Ungapped only)</span></div>
+                  <div class="slack-divider"></div>
+                  <div class="slack-summary"><strong style="color: white;">Total: 22,000 SEK</strong> · <span class="pos">▲ +8% vs prior day</span> · <span class="pos">▲ +12% vs 7-day avg</span></div>
+                </div>
+
+                <!-- SESSIONS -->
+                <div class="slack-section">
+                  <div class="slack-section-head">🌐 Sessions · GA4</div>
+                  <div class="slack-bullet"><strong>Total:</strong> 3,840 sessions</div>
+                  <div class="slack-sub-bullet">└ Liana 1,520 · Profinder 1,180 · Ungapped 1,140</div>
+                  <div class="slack-summary"><span class="pos">▲ +6% vs prior day</span> · paid 38% · organic 41% · direct 21%</div>
+                </div>
+
+                <!-- CONVERSIONS -->
+                <div class="slack-section">
+                  <div class="slack-section-head">🎯 Conversions · GA4</div>
+                  <div class="slack-bullet"><strong>Total:</strong> 47 conversions <span style="color: #9C9C9E;">(by type: demo 18 · signup 22 · lead 7)</span></div>
+                  <div class="slack-sub-bullet">└ <strong style="color: white;">Liana 14:</strong> demo 8 · signup 4 · lead 2</div>
+                  <div class="slack-sub-bullet">└ <strong style="color: white;">Profinder 19:</strong> demo 5 · signup 12 · lead 2</div>
+                  <div class="slack-sub-bullet">└ <strong style="color: white;">Ungapped 14:</strong> demo 5 · signup 6 · lead 3</div>
+                  <div class="slack-summary">Sessions → conversion: <strong style="color: white;">1.22%</strong> · target ≥ 1.5% · <span class="neg">▼ 0.28% under</span></div>
+                </div>
+
+                <!-- MQLs -->
+                <div class="slack-section">
+                  <div class="slack-section-head">✅ MQLs · Pipedrive</div>
+                  <div class="slack-bullet"><strong>Total:</strong> 12 new MQLs <span style="color: #9C9C9E;">(lead-score ≥ 60)</span></div>
+                  <div class="slack-sub-bullet">└ Liana 4 · Profinder 5 · Ungapped 3</div>
+                  <div class="slack-summary">Sales-validated within 24h: <strong style="color: white;">9/12 (75%)</strong> · Cost / MQL: <strong style="color: white;">1,833 SEK</strong> · <span class="pos">▼ −12% vs 7-day avg</span></div>
+                </div>
+
+                <!-- FLAGS -->
+                <div class="slack-section">
+                  <div class="slack-section-head">🚨 Flags worth your attention</div>
+                  <div class="slack-flag">
+                    <span class="flag-brand">PROFINDER</span> LinkedIn CTR dropped to 0.4% (avg 1.1%) — creative likely fatigued. 3 ad sets, top-spending one running 14 days.
+                  </div>
+                  <div class="slack-flag">
+                    <span class="flag-brand">LIANA</span> Paid search CPC up 28% on commercial keywords ("marknadsföringsplattform", "EU CMS"). Bid pressure detected.
+                  </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="slack-cta">
+                  <button class="slack-btn primary">Open dashboard</button>
+                  <button class="slack-btn">Diagnose flags</button>
+                  <button class="slack-btn">Snooze tomorrow</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- WHY THIS MATTERS -->
+  <div class="why-strip">
+
+    <div class="why-card">
+      <div class="why-num">01 · Why daily not weekly</div>
+      <div class="why-headline">Habits compound — weekly slips, daily sticks</div>
+      <div class="why-detail">Daily creates the muscle of looking at performance every morning. Weekly digests get ignored after sprint 2. The cost difference is &lt;30 SEK/month, the behavior difference is everything.</div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-num">02 · Why push not pull</div>
+      <div class="why-headline">Meet people where they already work</div>
+      <div class="why-detail">Even a great dashboard requires opening a tab. Slack is the first thing people check. Pushing data into Slack — formatted, synthesized, with flags — converts a 12-minute ritual into a 90-second scan.</div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-num">03 · Why Claude as the layer</div>
+      <div class="why-headline">Synthesis &gt; aggregation</div>
+      <div class="why-detail">A SQL pipeline can aggregate. Only an LLM can write "LinkedIn CTR fatigued — top ad set running 14 days, replace it" instead of "CTR 0.4%". The flags are the value, not the numbers.</div>
+    </div>
+
+  </div>
+
+  <!-- TECH STACK FOOTER -->
+  <div class="tech-strip">
+    <div class="tech-cell">
+      <div class="tech-label">Tech stack</div>
+      <div class="tech-value">n8n · Claude Sonnet 4.6 · 5 MCP servers</div>
+      <div class="tech-sub">All self-hosted except Claude API</div>
+    </div>
+    <div class="tech-cell">
+      <div class="tech-label">Build time</div>
+      <div class="tech-value">~6 hours initial · 1 hour / month tuning</div>
+      <div class="tech-sub">Day-one work in 90-day plan, week 5–6</div>
+    </div>
+    <div class="tech-cell">
+      <div class="tech-label">Running cost</div>
+      <div class="tech-value">~5 SEK/day · ~150 SEK/month</div>
+      <div class="tech-sub">Claude API ≈ 100 SEK · n8n hosting ≈ 50 SEK</div>
+    </div>
+    <div class="tech-cell">
+      <div class="tech-label">Repeatable for</div>
+      <div class="tech-value">Weekly board · Monthly investor digest</div>
+      <div class="tech-sub">Same architecture · different schedule + scope</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workflow — Weekly Keyword &amp; Content Intelligence</title>
+<style>
+:root {
+  --coral: #E94B6E;
+  --coral-soft: #FCE5EA;
+  --teal: #1FB6B6;
+  --teal-soft: #E5F7F7;
+  --jungle: #195B5A;
+  --jungle-soft: #C8E0DF;
+  --alabaster: #F7F4E8;
+  --bg: #F8F8F8;
+  --card-bg: #FFFFFF;
+  --border: #E5E5E5;
+  --text: #1A1A1A;
+  --text-mid: #6B6B6B;
+  --text-dim: #9B9B9B;
+  --green: #1FB667;
+  --red: #E94B6E;
+  --amber: #F9B250;
+  --purple: #6B5DD3;
+  --purple-soft: #EBE7FA;
+  --notion-bg: #FFFFFF;
+  --notion-border: #EDECE9;
+  --notion-text: #37352F;
+  --notion-mid: #787774;
+  --notion-callout-bg: #F1F1EF;
+  --notion-callout-blue: #DDEBF1;
+  --notion-callout-green: #DDEDDA;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Open Sans', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.45;
+  padding: 20px;
+}
+
+.slide {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  padding: 28px 36px 24px;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  border: 1px solid var(--border);
+}
+
+/* === HEADER === */
+.slide-header { margin-bottom: 16px; }
+
+.slide-pill {
+  display: inline-block;
+  background: var(--purple-soft);
+  color: var(--purple);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 11px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.slide-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+
+.slide-title .accent { color: var(--purple); }
+
+.slide-sub {
+  font-size: 13px;
+  color: var(--text-mid);
+  max-width: 1100px;
+  line-height: 1.5;
+}
+
+/* === ARCHITECTURE (n8n canvas flowchart) === */
+.architecture {
+  margin-bottom: 16px;
+}
+
+.arch-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.arch-caption {
+  font-size: 11px;
+  color: var(--text-mid);
+  text-align: center;
+  margin-top: 8px;
+  padding: 0 16px;
+  line-height: 1.5;
+}
+
+/* === BODY GRID === */
+.body-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 18px;
+}
+
+/* === FLOW STEPS (left) === */
+.flow-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.flow-steps { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+
+.flow-step {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 8px 11px;
+}
+
+.flow-num {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--purple);
+  color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+}
+
+.flow-content-title {
+  font-size: 11.5px; font-weight: 700; margin-bottom: 1px;
+}
+
+.flow-content-body {
+  font-size: 10.5px; color: var(--text-mid); line-height: 1.4;
+}
+
+.flow-tag {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 4px;
+}
+.flow-tag.cron { background: #FFF1E6; color: #C7682B; }
+.flow-tag.mcp { background: var(--teal-soft); color: var(--teal); }
+.flow-tag.claude { background: var(--purple-soft); color: var(--purple); }
+.flow-tag.deliver { background: #F0F0EE; color: #2F2F2F; }
+
+/* Side meta box (under flow) */
+.side-meta {
+  background: var(--alabaster);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.side-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  padding: 4px 0;
+  border-bottom: 1px dashed rgba(0,0,0,0.08);
+}
+.side-meta-row:last-child { border-bottom: none; }
+.side-meta-label { color: var(--text-mid); font-weight: 600; }
+.side-meta-value { color: var(--text); font-weight: 700; font-size: 11.5px; }
+.side-meta-value.green { color: #1F7A3F; }
+
+/* === NOTION MOCKUP (right) === */
+.notion-page {
+  background: var(--notion-bg);
+  border: 1px solid var(--notion-border);
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  color: var(--notion-text);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+}
+
+.notion-toolbar {
+  background: #FBFAF8;
+  border-bottom: 1px solid var(--notion-border);
+  padding: 6px 14px;
+  font-size: 10px;
+  color: var(--notion-mid);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.notion-tag {
+  background: #E9E9E7;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+.notion-body {
+  padding: 16px 22px 18px;
+}
+
+.notion-h1 {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+  color: var(--notion-text);
+}
+
+.notion-meta {
+  font-size: 10px;
+  color: var(--notion-mid);
+  margin-bottom: 10px;
+}
+
+.notion-callout {
+  background: var(--notion-callout-bg);
+  border-radius: 4px;
+  padding: 8px 11px;
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 8px;
+  margin: 8px 0 12px;
+  font-size: 11.5px;
+  color: var(--notion-text);
+  line-height: 1.45;
+}
+.notion-callout.tldr { background: var(--notion-callout-blue); }
+.notion-callout.win { background: var(--notion-callout-green); }
+
+.notion-callout-icon { font-size: 13px; }
+
+.notion-callout strong { color: var(--notion-text); }
+.num-pos { color: #1F7A3F; font-weight: 700; }
+.num-neg { color: #C92D2D; font-weight: 700; }
+.num-mute { color: var(--notion-mid); }
+
+.notion-q-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.notion-q {
+  background: #FBFAF8;
+  border: 1px solid var(--notion-border);
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+
+.notion-q-head {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+
+.notion-q-num {
+  font-size: 9px;
+  font-weight: 700;
+  background: #E9E9E7;
+  color: var(--notion-mid);
+  padding: 1px 5px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+}
+
+.notion-q-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--notion-text);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.notion-q-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+  margin-top: 4px;
+}
+
+.notion-q-table td {
+  padding: 3px 0;
+  vertical-align: top;
+  border-bottom: 1px solid #F0EFEC;
+}
+.notion-q-table tr:last-child td { border-bottom: none; }
+
+.notion-q-table .col-key {
+  font-weight: 600;
+  color: var(--notion-text);
+  padding-right: 6px;
+}
+.notion-q-table .col-val {
+  text-align: right;
+  white-space: nowrap;
+  color: var(--notion-mid);
+  font-variant-numeric: tabular-nums;
+}
+
+.notion-q-summary {
+  font-size: 10px;
+  color: var(--notion-mid);
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px dashed var(--notion-border);
+  line-height: 1.4;
+}
+
+.brand-pill {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+.brand-u { background: #FCE5EA; color: #B83456; }
+.brand-p { background: #E5F7F7; color: #0D7676; }
+.brand-l { background: #E8EFEE; color: #195B5A; }
+
+/* Cluster section (Q5) */
+.cluster-section-head {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--notion-mid);
+  margin: 4px 0 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.cluster-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cluster-card {
+  background: #FBFAF8;
+  border: 1px solid var(--notion-border);
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+
+.cluster-title {
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  line-height: 1.25;
+}
+
+.cluster-stat {
+  font-size: 9.5px;
+  color: var(--notion-mid);
+  margin-bottom: 4px;
+}
+
+.cluster-recommendation {
+  font-size: 10.5px;
+  color: var(--notion-text);
+  line-height: 1.4;
+}
+
+.cluster-impact {
+  font-size: 9.5px;
+  color: var(--notion-mid);
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px dashed var(--notion-border);
+}
+
+/* === ONE-LINE FOOTER === */
+.tech-footer {
+  margin-top: 14px;
+  padding: 10px 16px;
+  background: var(--alabaster);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tech-footer .tech-pair { display: flex; gap: 6px; }
+.tech-footer .tech-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+.tech-footer .tech-value { font-weight: 600; color: var(--text); }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- HEADER -->
+  <div class="slide-header">
+    <div class="slide-pill">AI Workflow · Stand-out Element · Alternative</div>
+    <div class="slide-title">Weekly <span class="accent">Keyword &amp; Content</span> Intelligence</div>
+    <div class="slide-sub">
+      Three Google sources cross-referenced by Claude every Sunday. Finds wasted ad spend, missing keyword opportunities, and content gaps — and writes recommendations directly into a Notion page the team works from on Monday morning. Replaces what an SEO/SEM agency typically delivers monthly with an in-house weekly cycle.
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE — n8n canvas flowchart -->
+  <div class="architecture">
+    <svg class="arch-svg" viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg">
+
+      <defs>
+        <!-- Drop shadow -->
+        <filter id="card-shadow-k" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-opacity="0.15"/>
+        </filter>
+        <filter id="bubble-shadow-k" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="1" stdDeviation="1.8" flood-opacity="0.18"/>
+        </filter>
+
+        <!-- Arrow markers -->
+        <marker id="arr-white-k" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0 0 L10 5 L0 10 z" fill="#fff"/>
+        </marker>
+
+        <!-- Logo symbols -->
+        <symbol id="i-clock-k" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="#333" stroke-width="2"/>
+          <line x1="12" y1="12" x2="12" y2="6.5" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+          <line x1="12" y1="12" x2="16.2" y2="14" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+
+        <symbol id="i-robot-k" viewBox="0 0 24 24">
+          <circle cx="12" cy="3.6" r="1.3" fill="#2D2D2D"/>
+          <line x1="12" y1="4.9" x2="12" y2="7" stroke="#2D2D2D" stroke-width="1.5"/>
+          <rect x="5" y="7" width="14" height="13" rx="3" fill="none" stroke="#2D2D2D" stroke-width="1.5"/>
+          <circle cx="9.5" cy="12" r="1.4" fill="#2D2D2D"/>
+          <circle cx="14.5" cy="12" r="1.4" fill="#2D2D2D"/>
+          <line x1="9.5" y1="16" x2="14.5" y2="16" stroke="#2D2D2D" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="2.5" y1="12" x2="5" y2="12" stroke="#2D2D2D" stroke-width="1.5"/>
+          <line x1="19" y1="12" x2="21.5" y2="12" stroke="#2D2D2D" stroke-width="1.5"/>
+        </symbol>
+
+        <symbol id="i-notion-k" viewBox="0 0 24 24">
+          <rect width="24" height="24" rx="3" fill="white"/>
+          <path d="M5 5h3l8 11V5h3v14h-3l-8-11v11H5V5z" fill="#000"/>
+        </symbol>
+
+        <symbol id="i-claude-k" viewBox="0 0 24 24">
+          <rect width="24" height="24" rx="3" fill="#191919"/>
+          <g transform="translate(12 12)" fill="#D97757">
+            <rect x="-1" y="-8.5" width="2" height="17" rx="1"/>
+            <rect x="-8.5" y="-1" width="17" height="2" rx="1"/>
+            <rect x="-1" y="-8.5" width="2" height="17" rx="1" transform="rotate(45)"/>
+            <rect x="-8.5" y="-1" width="17" height="2" rx="1" transform="rotate(45)"/>
+          </g>
+        </symbol>
+
+        <symbol id="i-googleads-k" viewBox="0 0 24 24">
+          <path d="M9.5 2.5L2 15.5l3 5.2L13 7z" fill="#FBBC04"/>
+          <path d="M14.5 2.5L22 15.5l-3 5.2L11 7z" fill="#4285F4"/>
+          <circle cx="6.5" cy="20.7" r="3" fill="#34A853"/>
+        </symbol>
+
+        <symbol id="i-ga4-k" viewBox="0 0 24 24">
+          <rect x="17" y="2" width="5" height="20" rx="2.5" fill="#F9AB00"/>
+          <rect x="9.5" y="9" width="5" height="13" rx="2.5" fill="#E37400"/>
+          <circle cx="4" cy="20" r="2.5" fill="#E37400"/>
+        </symbol>
+
+        <symbol id="i-gsc-k" viewBox="0 0 24 24">
+          <circle cx="10.5" cy="10.5" r="6.8" fill="none" stroke="#4285F4" stroke-width="2.2"/>
+          <line x1="15.5" y1="15.5" x2="20.5" y2="20.5" stroke="#4285F4" stroke-width="2.4" stroke-linecap="round"/>
+          <rect x="6.8" y="11.5" width="1.5" height="2" fill="#FBBC05"/>
+          <rect x="9.3" y="9.5" width="1.5" height="4" fill="#34A853"/>
+          <rect x="11.8" y="7.5" width="1.5" height="6" fill="#EA4335"/>
+        </symbol>
+
+        <symbol id="i-mcp-k" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="6.8" fill="none" stroke="#1FB6B6" stroke-width="2.4"/>
+          <line x1="15.5" y1="15.5" x2="20.5" y2="20.5" stroke="#1FB6B6" stroke-width="2.4" stroke-linecap="round"/>
+        </symbol>
+
+        <symbol id="i-n8n-brand" viewBox="0 0 24 24">
+          <line x1="6" y1="12" x2="18" y2="12" stroke="#EA4B71" stroke-width="2"/>
+          <line x1="12" y1="6" x2="12" y2="18" stroke="#EA4B71" stroke-width="2"/>
+          <circle cx="6" cy="12" r="3" fill="#EA4B71"/>
+          <circle cx="12" cy="6" r="2.5" fill="#EA4B71"/>
+          <circle cx="12" cy="18" r="2.5" fill="#EA4B71"/>
+          <circle cx="18" cy="12" r="3" fill="#EA4B71"/>
+        </symbol>
+      </defs>
+
+      <!-- n8n canvas background (lavender) -->
+      <rect width="1000" height="320" rx="14" fill="#DDD0EC"/>
+
+      <!-- n8n brand top-left -->
+      <use href="#i-n8n-brand" x="22" y="22" width="26" height="26"/>
+      <text x="56" y="42" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="700" fill="#2D2D2D">n8n</text>
+
+      <!-- ===== TOP ROW: Schedule → AI Workflow → Notion ===== -->
+
+      <!-- Schedule node -->
+      <g filter="url(#card-shadow-k)">
+        <rect x="180" y="80" width="80" height="80" rx="10" fill="white"/>
+      </g>
+      <use href="#i-clock-k" x="200" y="100" width="40" height="40"/>
+      <text x="220" y="180" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="#2D2D2D">Schedule</text>
+      <text x="220" y="194" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#5A5A5A">Sun 18:00</text>
+
+      <!-- Arrow Schedule → AI Workflow -->
+      <path d="M265 120 L420 120" stroke="white" stroke-width="2.5" fill="none" marker-end="url(#arr-white-k)"/>
+
+      <!-- AI Workflow node (center, highlighted) -->
+      <g filter="url(#card-shadow-k)">
+        <rect x="430" y="75" width="120" height="90" rx="10" fill="white" stroke="#EA4B71" stroke-width="2"/>
+      </g>
+      <use href="#i-robot-k" x="470" y="100" width="40" height="40"/>
+      <text x="490" y="185" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="#2D2D2D">AI Workflow</text>
+      <text x="490" y="199" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#5A5A5A">5 question-passes</text>
+
+      <!-- Arrow AI Workflow → Notion -->
+      <path d="M555 120 L710 120" stroke="white" stroke-width="2.5" fill="none" marker-end="url(#arr-white-k)"/>
+
+      <!-- Notion node -->
+      <g filter="url(#card-shadow-k)">
+        <rect x="720" y="80" width="80" height="80" rx="10" fill="white"/>
+      </g>
+      <use href="#i-notion-k" x="740" y="100" width="40" height="40"/>
+      <text x="760" y="180" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="#2D2D2D">Notion</text>
+      <text x="760" y="194" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#5A5A5A">+ Slack ping</text>
+
+      <!-- ===== BOTTOM ROW: Chat Model + MCP Server (feeding up) ===== -->
+
+      <!-- Chat Model (Claude) -->
+      <g filter="url(#card-shadow-k)">
+        <rect x="350" y="220" width="80" height="80" rx="10" fill="white"/>
+      </g>
+      <use href="#i-claude-k" x="370" y="240" width="40" height="40"/>
+      <text x="390" y="234" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="#2D2D2D" opacity="0"/>
+      <!-- (label below moved here:) -->
+      <text x="390" y="316" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="#2D2D2D">Chat Model</text>
+
+      <!-- Arrow up from Chat Model to AI Workflow -->
+      <path d="M425 222 Q450 195 470 168" stroke="white" stroke-width="2.5" fill="none" marker-end="url(#arr-white-k)"/>
+
+      <!-- MCP Server -->
+      <g filter="url(#card-shadow-k)">
+        <rect x="555" y="220" width="80" height="80" rx="10" fill="white"/>
+      </g>
+      <use href="#i-mcp-k" x="575" y="240" width="40" height="40"/>
+      <text x="595" y="316" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="#2D2D2D">MCP Server</text>
+
+      <!-- Arrow up from MCP Server to AI Workflow -->
+      <path d="M560 222 Q535 195 515 168" stroke="white" stroke-width="2.5" fill="none" marker-end="url(#arr-white-k)"/>
+
+      <!-- Floating logo bubbles around MCP Server (3 sources) -->
+      <g filter="url(#bubble-shadow-k)">
+        <circle cx="660" cy="225" r="17" fill="white"/>
+      </g>
+      <use href="#i-googleads-k" x="649" y="214" width="22" height="22"/>
+
+      <g filter="url(#bubble-shadow-k)">
+        <circle cx="675" cy="260" r="17" fill="white"/>
+      </g>
+      <use href="#i-ga4-k" x="664" y="249" width="22" height="22"/>
+
+      <g filter="url(#bubble-shadow-k)">
+        <circle cx="660" cy="295" r="17" fill="white"/>
+      </g>
+      <use href="#i-gsc-k" x="649" y="284" width="22" height="22"/>
+
+    </svg>
+    <div class="arch-caption">
+      Schedule trigger fires Sunday 18:00 → AI Workflow runs 5 question-passes against 3 Google sources via MCP, with Claude as the LLM → page written to Notion + ping to <strong>#seo-sem</strong> for Monday standup.
+    </div>
+  </div>
+
+  <!-- BODY GRID -->
+  <div class="body-grid">
+
+    <!-- LEFT: Flow + meta -->
+    <div>
+      <div class="flow-section-title">Weekly flow</div>
+      <div class="flow-steps">
+
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div>
+            <div class="flow-content-title"><span class="flow-tag cron">Cron</span>Sunday 18:00 trigger</div>
+            <div class="flow-content-body">Pull last 7 days from Ads, GA4, GSC. Caches raw data for re-runs.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div>
+            <div class="flow-content-title"><span class="flow-tag mcp">MCP</span>Cross-reference + join</div>
+            <div class="flow-content-body">Match Ads keywords ↔ GA4 conversions ↔ GSC queries. Brand-map via campaign regex.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div>
+            <div class="flow-content-title"><span class="flow-tag claude">Claude</span>Waste analysis (Q1+Q2)</div>
+            <div class="flow-content-body">Rank irrelevant + underperforming keywords by spend × low-conv probability.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div>
+            <div class="flow-content-title"><span class="flow-tag claude">Claude</span>Gap + content (Q3–Q5)</div>
+            <div class="flow-content-body">GSC→Ads gap · page coverage check · group into content clusters with impact estimates.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div>
+            <div class="flow-content-title"><span class="flow-tag deliver">Deliver</span>Notion page + Slack ping</div>
+            <div class="flow-content-body">Structured page in SEO/SEM database · #seo-sem TL;DR ping with deep-link.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="side-meta">
+        <div class="side-meta-row"><span class="side-meta-label">Stack</span><span class="side-meta-value">n8n · Claude · 3 MCPs · Notion</span></div>
+        <div class="side-meta-row"><span class="side-meta-label">Run cost</span><span class="side-meta-value">~250 SEK / month</span></div>
+        <div class="side-meta-row"><span class="side-meta-label">Build</span><span class="side-meta-value">~10 h initial · 2 h / mo tuning</span></div>
+        <div class="side-meta-row"><span class="side-meta-label">Replaces</span><span class="side-meta-value green">Agency monthly audit (25–40 kSEK)</span></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Notion mockup -->
+    <div>
+      <div class="notion-page">
+
+        <div class="notion-toolbar">
+          <span>📁 Marketing › SEO &amp; SEM › <strong style="color: var(--notion-text);">Weekly Intelligence</strong></span>
+          <div class="notion-tag">Auto-generated</div>
+        </div>
+
+        <div class="notion-body">
+
+          <div class="notion-h1">🔍 Week 17 · Keyword &amp; Content Intelligence</div>
+          <div class="notion-meta">Generated Sun Apr 26, 18:04 · Window Apr 20–26 · Group rollup (Liana · Profinder · Ungapped)</div>
+
+          <!-- TL;DR -->
+          <div class="notion-callout tldr">
+            <div class="notion-callout-icon">💡</div>
+            <div>
+              <strong>TL;DR if executed this week:</strong> save <span class="num-pos">≈ 4,200 SEK/week</span> in waste · redirect <span class="num-pos">≈ 2,400 SEK/week</span> to gap keywords (4× expected ROAS) · unlock <span class="num-pos">≈ 180 sessions/mo</span> by closing 3 content clusters · <strong>+13 MQLs/qtr.</strong>
+            </div>
+          </div>
+
+          <!-- Q1, Q2, Q3 in 3-col grid -->
+          <div class="notion-q-grid">
+
+            <!-- Q1: Negatives -->
+            <div class="notion-q">
+              <div class="notion-q-head">
+                <span class="notion-q-num">Q1</span>
+                <span class="notion-q-title">Negatives to add</span>
+              </div>
+              <table class="notion-q-table">
+                <tr><td class="col-key">"mailchimp gratis" <span class="brand-pill brand-u">UG</span></td><td class="col-val">820 SEK · 0 conv</td></tr>
+                <tr><td class="col-key">"linkedin scraper free" <span class="brand-pill brand-p">PF</span></td><td class="col-val">640 SEK · 0 conv</td></tr>
+                <tr><td class="col-key">"vainu pris gratis" <span class="brand-pill brand-p">PF</span></td><td class="col-val">510 SEK · 0 conv</td></tr>
+              </table>
+              <div class="notion-q-summary">+ 11 more candidates · saves <span class="num-pos">≈ 4,200 SEK/wk</span></div>
+            </div>
+
+            <!-- Q2: Pause/delete -->
+            <div class="notion-q">
+              <div class="notion-q-head">
+                <span class="notion-q-num">Q2</span>
+                <span class="notion-q-title">Pause or delete</span>
+              </div>
+              <table class="notion-q-table">
+                <tr><td class="col-key">"marketing automation platform" <span class="brand-pill brand-u">UG</span></td><td class="col-val">1,240 SEK · CTR 0.6%</td></tr>
+                <tr><td class="col-key">"b2b prospecting platform" <span class="brand-pill brand-p">PF</span></td><td class="col-val">980 SEK · CPA 4.9k</td></tr>
+                <tr><td class="col-key">"marketing dashboard" <span class="brand-pill brand-l">LI</span></td><td class="col-val">620 SEK · 0 conv</td></tr>
+              </table>
+              <div class="notion-q-summary">8 pause + 3 delete · reallocates <span class="num-pos">≈ 3,800 SEK/wk</span></div>
+            </div>
+
+            <!-- Q3: Keyword gap -->
+            <div class="notion-q">
+              <div class="notion-q-head">
+                <span class="notion-q-num">Q3</span>
+                <span class="notion-q-title">Gap: GSC → Ads</span>
+              </div>
+              <table class="notion-q-table">
+                <tr><td class="col-key">"yritystiedot API" <span class="brand-pill brand-p">PF</span></td><td class="col-val">1,840 impr · pos 4.2</td></tr>
+                <tr><td class="col-key">"transaktionsmail Sverige" <span class="brand-pill brand-u">UG</span></td><td class="col-val">1,210 impr · pos 3.1</td></tr>
+                <tr><td class="col-key">"mailchimp svenska alternativ" <span class="brand-pill brand-u">UG</span></td><td class="col-val">980 impr · pos 2.4</td></tr>
+              </table>
+              <div class="notion-q-summary">+ 9 more · est. budget 2.4k/wk · ROAS 4×</div>
+            </div>
+
+          </div>
+
+          <!-- Q4 + Q5: Content clusters -->
+          <div class="cluster-section-head">
+            <span class="notion-q-num">Q4 + Q5</span>
+            Content coverage &amp; cluster gaps · 3 priorities for editorial roadmap
+          </div>
+          <div class="cluster-grid">
+
+            <div class="cluster-card">
+              <div class="cluster-title"><span>B2B Prospect Data API</span><span class="brand-pill brand-p">PF</span></div>
+              <div class="cluster-stat">8 queries · 4,200 impr/mo · 0 dedicated pages</div>
+              <div class="cluster-recommendation">Pillar page + 4 sub-articles: REST API docs, integrations (HubSpot/Pipedrive/SF), data freshness, GDPR.</div>
+              <div class="cluster-impact"><span class="num-pos">+80 sessions/mo · +6 MQLs/qtr</span></div>
+            </div>
+
+            <div class="cluster-card">
+              <div class="cluster-title"><span>Mailchimp/Klaviyo alt. SE</span><span class="brand-pill brand-u">UG</span></div>
+              <div class="cluster-stat">5 queries · 2,400 impr/mo · 1 thin blog post</div>
+              <div class="cluster-recommendation">Comparison hub: head-to-head pages, feature matrix, pricing comparison, migration guide.</div>
+              <div class="cluster-impact"><span class="num-pos">+60 sessions/mo · +4 MQLs/qtr</span></div>
+            </div>
+
+            <div class="cluster-card">
+              <div class="cluster-title"><span>Public Sector Email (SE)</span><span class="brand-pill brand-u">UG</span></div>
+              <div class="cluster-stat">4 queries · 1,800 impr/mo · 1 case study</div>
+              <div class="cluster-recommendation">Vertical hub: GDPR-for-public-sector, accessibility checklist, procurement language, 3 case studies.</div>
+              <div class="cluster-impact"><span class="num-pos">+40 sessions/mo · +3 MQLs/qtr</span></div>
+            </div>
+
+          </div>
+
+          <!-- WIN BOX -->
+          <div class="notion-callout win">
+            <div class="notion-callout-icon">✅</div>
+            <div>
+              <strong>Net first-quarter ROI on these recommendations: ~24×.</strong> <span style="color: var(--notion-mid);">Cumulative impact rolls up to dashboard's pipeline-coverage and sourced-ARR tiles.</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ONE-LINE TECH FOOTER -->
+  <div class="tech-footer">
+    <div class="tech-pair"><span class="tech-label">Principle:</span><span class="tech-value">Cross-reference 3 sources beats any single tool · ranked, not exhaustive · weekly cadence beats monthly audit</span></div>
+    <div class="tech-pair"><span class="tech-label">Delivers:</span><span class="tech-value">Day-30 in 90-day plan</span></div>
+  </div>
+
+</div>
+
+</body>
+</html>

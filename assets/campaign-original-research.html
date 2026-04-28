@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing Campaign — Original Research · 2026 Nordic Sales Intelligence Benchmark</title>
+<style>
+:root {
+  --coral: #E94B6E;
+  --coral-soft: #FCE5EA;
+  --teal: #1FB6B6;
+  --teal-soft: #E5F7F7;
+  --jungle: #195B5A;
+  --jungle-soft: #C8E0DF;
+  --alabaster: #F7F4E8;
+  --bg: #F8F8F8;
+  --card-bg: #FFFFFF;
+  --border: #E5E5E5;
+  --text: #1A1A1A;
+  --text-mid: #6B6B6B;
+  --text-dim: #9B9B9B;
+  --green: #1FB667;
+  --amber: #F9B250;
+  --purple: #6B5DD3;
+  --purple-soft: #EBE7FA;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Open Sans', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.45;
+  padding: 20px;
+}
+
+.slide {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  padding: 28px 36px 24px;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  border: 1px solid var(--border);
+}
+
+/* === HEADER === */
+.slide-header { margin-bottom: 18px; }
+
+.slide-pill {
+  display: inline-block;
+  background: var(--teal-soft);
+  color: var(--teal);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 11px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.slide-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.slide-title .accent { color: var(--teal); }
+
+.slide-sub {
+  font-size: 13px;
+  color: var(--text-mid);
+  max-width: 1100px;
+  line-height: 1.5;
+}
+
+/* === HERO ROW: Angle + Report cover === */
+.hero-row {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.angle-box {
+  background: var(--alabaster);
+  border-left: 3px solid var(--teal);
+  border-radius: 8px;
+  padding: 14px 18px;
+}
+
+.angle-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.angle-headline {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.angle-hypothesis {
+  font-size: 12px;
+  color: var(--text);
+  margin-bottom: 10px;
+  font-style: italic;
+  border-left: 2px solid var(--coral);
+  padding-left: 10px;
+  line-height: 1.5;
+}
+
+.q-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 8px;
+}
+
+.q-row { font-size: 11.5px; line-height: 1.4; }
+
+.q-text {
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.q-prefix {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--teal);
+  letter-spacing: 0.06em;
+  margin-right: 6px;
+  background: var(--teal-soft);
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.q-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.q-opt {
+  font-size: 10.5px;
+  background: white;
+  border: 1px solid var(--border);
+  padding: 3px 9px;
+  border-radius: 4px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.q-options-scale {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.q-num {
+  width: 22px;
+  height: 22px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-mid);
+}
+
+.q-scale-cap {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-left: 4px;
+}
+
+.q-more {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(0,0,0,0.1);
+}
+
+/* Report cover mockup */
+.report-cover {
+  background: linear-gradient(135deg, var(--jungle) 0%, var(--teal) 100%);
+  border-radius: 8px;
+  padding: 18px 18px 14px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  box-shadow: 0 4px 16px rgba(25, 91, 90, 0.25);
+}
+
+.report-cover::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 130px;
+  height: 130px;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
+.report-cover::after {
+  content: "";
+  position: absolute;
+  bottom: -50px;
+  left: -50px;
+  width: 130px;
+  height: 130px;
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+
+.cover-tag {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+
+.cover-edition {
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.7;
+  margin-bottom: 14px;
+}
+
+.cover-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.cover-title .em { color: #F8B6C2; }
+
+.cover-sub {
+  font-size: 11px;
+  opacity: 0.85;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+
+.cover-meta-strip {
+  margin-top: auto;
+  display: flex;
+  gap: 14px;
+  font-size: 9.5px;
+  opacity: 0.85;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.18);
+  position: relative;
+}
+
+.cover-meta-strip strong {
+  color: white;
+  font-weight: 700;
+  display: block;
+  font-size: 12px;
+  margin-bottom: 1px;
+}
+
+.cover-byline {
+  font-size: 10px;
+  opacity: 0.95;
+  font-weight: 600;
+  margin-top: 14px;
+  letter-spacing: 0.04em;
+}
+
+/* === PHASES GRID === */
+.phases-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.phase-arrow {
+  position: absolute;
+  top: 50%;
+  font-size: 20px;
+  color: var(--text-dim);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.phase {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.phase.p1 { border-top: 3px solid var(--teal); }
+.phase.p2 { border-top: 3px solid var(--purple); }
+.phase.p3 { border-top: 3px solid var(--coral); }
+
+.phase-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.phase-name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.phase-time {
+  font-size: 9.5px;
+  color: var(--text-dim);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.step-stack { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+
+.step-card {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 10px;
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.step-num {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: white;
+  color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10.5px; font-weight: 700;
+  border: 1.5px solid var(--text-dim);
+  margin-top: 1px;
+}
+
+.phase.p1 .step-num { border-color: var(--teal); color: var(--teal); }
+.phase.p2 .step-num { border-color: var(--purple); color: var(--purple); }
+.phase.p3 .step-num { border-color: var(--coral); color: var(--coral); }
+
+.step-title {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 2px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.step-body {
+  font-size: 10.5px;
+  color: var(--text-mid);
+  line-height: 1.45;
+}
+
+.step-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-top: 4px;
+  background: var(--alabaster);
+  color: var(--text-mid);
+}
+
+/* === KPI BAND === */
+.kpi-band {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  background: var(--alabaster);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+}
+
+.kpi-cell {
+  text-align: center;
+  padding: 0 4px;
+}
+
+.kpi-cell:not(:last-child) { border-right: 1px dashed rgba(0,0,0,0.1); }
+
+.kpi-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.kpi-value {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.kpi-sub {
+  font-size: 10px;
+  color: var(--text-mid);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* === FOOTER STRIP === */
+.footer-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  padding: 8px 14px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.footer-strip .pair { display: flex; gap: 6px; align-items: baseline; }
+.footer-strip .label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+.footer-strip .value { font-weight: 600; color: var(--text); }
+.footer-strip .accent-coral { color: var(--coral); font-weight: 700; }
+
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- HEADER -->
+  <div class="slide-header">
+    <div class="slide-pill">Marketing Campaign · Stand-out Element</div>
+    <div class="slide-title"><span class="accent">Original Research</span> — The 2026 Nordic Sales Intelligence Benchmark</div>
+    <div class="slide-sub">
+      An 8-week original-research campaign anchored on Profinder, sourced from a survey of 200+ Nordic B2B sales &amp; marketing leaders cross-referenced with Profinder's anonymized platform telemetry. Becomes a yearly compounding asset — 2026 · 2027 · 2028 — every edition stronger than the last as the dataset grows.
+    </div>
+  </div>
+
+  <!-- HERO: Angle + Report Cover -->
+  <div class="hero-row">
+    <div class="angle-box">
+      <div class="angle-label">The angle that earns the report a second look</div>
+      <div class="angle-headline">"In the age of signal-based selling, why are Nordic B2B teams still cold-calling 60% of their pipeline?"</div>
+      <div class="angle-hypothesis">
+        Hypothesis: Despite intent signals, trigger-event data, and AI prospecting being commercially available since ~2020, the median Nordic SaaS sales team in 2026 still sources the majority of pipeline from cold outreach — because signal-based selling lacks playbooks, benchmarks, and proof points. This report fills that gap.
+      </div>
+      <div class="angle-label" style="margin-top: 12px;">Survey backbone — 12 questions · ~5 min · sample questions</div>
+      <div class="q-stack">
+
+        <div class="q-row">
+          <div class="q-text"><span class="q-prefix">Q1</span>How do you use 3rd-party B2B data today?</div>
+          <div class="q-options">
+            <span class="q-opt">Prospecting</span>
+            <span class="q-opt">Enrichment</span>
+            <span class="q-opt">GTM playbooks</span>
+            <span class="q-opt">Not at all</span>
+          </div>
+        </div>
+
+        <div class="q-row">
+          <div class="q-text"><span class="q-prefix">Q2</span>How satisfied are you with the B2B data you currently use?</div>
+          <div class="q-options-scale">
+            <span class="q-num">1</span>
+            <span class="q-num">2</span>
+            <span class="q-num">3</span>
+            <span class="q-num">4</span>
+            <span class="q-num">5</span>
+            <span class="q-num">6</span>
+            <span class="q-num">7</span>
+            <span class="q-num">8</span>
+            <span class="q-num">9</span>
+            <span class="q-num">10</span>
+            <span class="q-scale-cap">very unsatisfied → very satisfied</span>
+          </div>
+        </div>
+
+        <div class="q-row">
+          <div class="q-text"><span class="q-prefix">Q3</span>If you use 3rd-party B2B data for automations, how do you do it?</div>
+          <div class="q-options">
+            <span class="q-opt">AI agents</span>
+            <span class="q-opt">Marketing automation only</span>
+            <span class="q-opt">CRM enrichment</span>
+            <span class="q-opt">Automated outreach / prospecting</span>
+            <span class="q-opt">Other</span>
+          </div>
+        </div>
+
+        <div class="q-more">+ 9 more questions: tooling stack · win rate by source · cycle by source · trigger events · AI in prospecting · data-quality pain · buying-committee size · 2027 priorities</div>
+
+      </div>
+    </div>
+
+    <!-- Report cover mockup -->
+    <div class="report-cover">
+      <div class="cover-tag">Profinder Industry Report</div>
+      <div class="cover-edition">2026 · First Edition</div>
+      <div class="cover-title">The Nordic Sales Intelligence <span class="em">Benchmark</span></div>
+      <div class="cover-sub">How B2B teams build pipeline in the age of signal-based selling</div>
+      <div class="cover-byline">— A research report by Profinder</div>
+      <div class="cover-meta-strip">
+        <div><strong>200+</strong>responses</div>
+        <div><strong>18</strong>charts</div>
+        <div><strong>8</strong>verticals</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASES -->
+  <div class="phases-grid">
+
+    <!-- PHASE 1: Research & gather -->
+    <div class="phase p1">
+      <div class="phase-head">
+        <div class="phase-name">Phase 1 · Research &amp; gather</div>
+        <div class="phase-time">W 1–3</div>
+      </div>
+      <div class="step-stack">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-title">Define angle + hypothesis</div>
+            <div class="step-body">Lock the headline, hypothesis, and 12 survey questions. Map analyst frame: who do we want to be quoted by (Salesforce, HubSpot, BVR analysts).</div>
+            <span class="step-tag">Output: Survey blueprint</span>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div>
+            <div class="step-title">Design + send survey</div>
+            <div class="step-body">Typeform · 5 min · distributed to ~600 group customers + LinkedIn outreach to ICP + Profinder paid ads. Incentive: early access + benchmark vs your team. Target: 200+ responses, 8 verticals, 5 countries.</div>
+            <span class="step-tag">Output: 200+ responses</span>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-title">Mine internal Profinder data</div>
+            <div class="step-body">Anonymized platform telemetry: which trigger events convert best · industry/size patterns · signal-based vs traditional benchmarks. Cross-reference with survey to find the headline-grabbing data point.</div>
+            <span class="step-tag">Output: 5–7 charts from data</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2: Produce -->
+    <div class="phase p2">
+      <div class="phase-head">
+        <div class="phase-name">Phase 2 · Produce</div>
+        <div class="phase-time">W 3–6</div>
+      </div>
+      <div class="step-stack">
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div>
+            <div class="step-title">Whitepaper · 22 pages</div>
+            <div class="step-body">Exec summary · 7 numbered findings · 5 sections (tooling, sources, AI, win-rate, predictions) · 18 charts · methodology appendix. Branded Profinder, group context in foreword.</div>
+            <span class="step-tag">Output: PDF + web version</span>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">5</div>
+          <div>
+            <div class="step-title">Landing page + email gate</div>
+            <div class="step-body">Single-page LP: hero, executive-summary excerpt, 5-field form (name, email, company, role, country). Pipedrive + GA4 wiring, UTM-disciplined.</div>
+            <span class="step-tag">Output: profinder.com/benchmark-2026</span>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">6</div>
+          <div>
+            <div class="step-title">Lead nurture · 4-email sequence</div>
+            <div class="step-body">Day 0 PDF + welcome · Day 3 top-3 takeaways + book benchmark-vs-your-team call · Day 7 vertical-relevant case · Day 14 sales offer or webinar invite. Lead-scored, routed to AE on signal.</div>
+            <span class="step-tag">Output: 4 emails (Ungapped MA)</span>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">7</div>
+          <div>
+            <div class="step-title">2 customer cases + 5 blog posts</div>
+            <div class="step-body">2 cases featured in report (different verticals). 5 derivative blog posts — one per finding — for SEO + sales ammunition. Each post linked back to the report.</div>
+            <span class="step-tag">Output: 7 evergreen pieces</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3: Distribute -->
+    <div class="phase p3">
+      <div class="phase-head">
+        <div class="phase-name">Phase 3 · Distribute</div>
+        <div class="phase-time">W 5–8</div>
+      </div>
+      <div class="step-stack">
+        <div class="step-card">
+          <div class="step-num">8</div>
+          <div>
+            <div class="step-title">LinkedIn distribution · 3 channels</div>
+            <div class="step-body">(a) Doc-style carousel post on Profinder page — 10 slides with key findings, highest-engagement format. (b) LinkedIn in-app lead-gen ads to ICP (sales/marketing leaders, 50+ employees, Nordics). (c) Sponsored exec-summary post with "Read full report" CTA.</div>
+            <span class="step-tag">Output: 3 LI placements</span>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">9</div>
+          <div>
+            <div class="step-title">Employee advocacy pack</div>
+            <div class="step-body">Pre-written posts for CEO, CMO, CRO, sales leaders to share. Shield/Taplio templates for personal-brand reach. Internal Slack hype with one-click share. Goal: 50+ employees post on launch day.</div>
+            <span class="step-tag">Output: Advocacy kit + Slack</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- KPI BAND — campaign targets · 3 months post-launch -->
+  <div class="kpi-band">
+    <div class="kpi-cell">
+      <div class="kpi-label">Sessions</div>
+      <div class="kpi-value">2,000</div>
+      <div class="kpi-sub">3 months · LP traffic</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Downloads</div>
+      <div class="kpi-value">300</div>
+      <div class="kpi-sub">15% session → download</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">SQLs</div>
+      <div class="kpi-value">40</div>
+      <div class="kpi-sub">sales-validated · 13% download → SQL</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Closed won</div>
+      <div class="kpi-value">10</div>
+      <div class="kpi-sub">25% SQL → won</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">New MRR</div>
+      <div class="kpi-value">200 kSEK</div>
+      <div class="kpi-sub">≈ 2.4 MSEK ARR · avg ACV 240k</div>
+    </div>
+  </div>
+
+  <!-- FOOTER STRIP -->
+  <div class="footer-strip">
+    <div class="pair"><span class="label">Why this campaign:</span><span class="value">Establishes Profinder as the category authority on signal-based selling in the Nordics — and the report becomes a yearly franchise (2026 → 2027 → 2028) that compounds dataset, brand, and inbound flow.</span></div>
+    <div class="pair"><span class="label">Cost:</span><span class="value">~150 kSEK (50% paid distribution · 25% production · 25% incentives)</span></div>
+    <div class="pair"><span class="label">Reuse:</span><span class="value accent-coral">Same blueprint runs for Liana &amp; Ungapped Q3/Q4</span></div>
+  </div>
+
+</div>
+
+</body>
+</html>

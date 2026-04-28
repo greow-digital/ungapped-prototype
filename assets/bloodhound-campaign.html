@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bloodhound Campaign — Cross-brand champion-tracking</title>
+<style>
+:root {
+  --coral: #E94B6E;
+  --coral-soft: #FCE5EA;
+  --teal: #1FB6B6;
+  --teal-soft: #E5F7F7;
+  --jungle: #195B5A;
+  --jungle-soft: #C8E0DF;
+  --alabaster: #F7F4E8;
+  --bg: #F8F8F8;
+  --card-bg: #FFFFFF;
+  --border: #E5E5E5;
+  --text: #1A1A1A;
+  --text-mid: #6B6B6B;
+  --text-dim: #9B9B9B;
+  --green: #1FB667;
+  --yellow-pill: #F9D85A;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Open Sans', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 32px;
+}
+
+.slide {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  padding: 48px 56px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  border: 1px solid var(--border);
+}
+
+/* Header */
+.slide-header {
+  margin-bottom: 32px;
+}
+
+.slide-pill {
+  display: inline-block;
+  background: var(--coral-soft);
+  color: var(--coral);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.slide-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.slide-title .accent {
+  color: var(--coral);
+}
+
+.slide-sub {
+  font-size: 16px;
+  color: var(--text-mid);
+  max-width: 800px;
+}
+
+/* Flow */
+.flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin: 40px 0 32px;
+  position: relative;
+}
+
+.flow-step {
+  position: relative;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 20px;
+  text-align: left;
+}
+
+.flow-step.trigger { border-color: var(--coral); background: var(--coral-soft); }
+.flow-step.process { border-color: var(--teal); background: var(--teal-soft); }
+.flow-step.outreach { border-color: var(--jungle); background: var(--jungle-soft); }
+.flow-step.outcome { border-color: var(--green); background: #E5F7EE; }
+
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: white;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  border: 2px solid var(--border);
+}
+
+.flow-step.trigger .step-num { border-color: var(--coral); color: var(--coral); }
+.flow-step.process .step-num { border-color: var(--teal); color: var(--teal); }
+.flow-step.outreach .step-num { border-color: var(--jungle); color: var(--jungle); }
+.flow-step.outcome .step-num { border-color: var(--green); color: var(--green); }
+
+.step-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.step-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  line-height: 1.25;
+}
+
+.step-body {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+
+.step-detail {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(0,0,0,0.1);
+  font-size: 11px;
+  font-family: 'SF Mono', Monaco, monospace;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.step-detail .label {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+/* Arrow between steps */
+.flow-arrow {
+  position: absolute;
+  top: 50%;
+  right: -16px;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: var(--text-dim);
+  z-index: 2;
+  background: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+}
+
+.flow-step:last-child .flow-arrow { display: none; }
+
+/* Cross-brand split */
+.split-section {
+  margin: 32px 0;
+  padding: 24px 28px;
+  background: var(--bg);
+  border-radius: 12px;
+  border-left: 4px solid var(--jungle);
+}
+
+.split-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-mid);
+  margin-bottom: 14px;
+}
+
+.split-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.split-item {
+  background: white;
+  padding: 16px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.split-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.brand-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.brand-dot.ungapped { background: var(--coral); }
+.brand-dot.profinder { background: var(--teal); }
+.brand-dot.liana { background: var(--jungle); }
+
+.split-rule {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+
+/* KPI band */
+.kpi-band {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 32px 0;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, var(--coral-soft) 0%, var(--teal-soft) 100%);
+  border-radius: 14px;
+}
+
+.kpi-cell {
+  text-align: left;
+}
+
+.kpi-cell-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-mid);
+  margin-bottom: 6px;
+}
+
+.kpi-cell-value {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.kpi-cell-context {
+  font-size: 12px;
+  color: var(--text-mid);
+}
+
+/* Why-it-works callout */
+.callout {
+  margin-top: 28px;
+  padding: 24px 28px;
+  background: var(--jungle);
+  color: white;
+  border-radius: 14px;
+}
+
+.callout-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.callout-body {
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.callout-body strong {
+  color: var(--yellow-pill);
+}
+
+/* Footer */
+.slide-footer {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+@media (max-width: 1100px) {
+  .flow { grid-template-columns: 1fr 1fr; }
+  .flow-arrow { display: none !important; }
+  .split-grid, .kpi-band { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- Header -->
+  <div class="slide-header">
+    <span class="slide-pill">🎯 Stand-out element · Campaign concept in detail</span>
+    <h1 class="slide-title">Bloodhound: <span class="accent">cross-brand champion-tracking,</span> powered by Profinder</h1>
+    <p class="slide-sub">When a buyer or champion changes jobs, they take their preferences with them. Our data sees them. Our outreach reaches them — across all three brands.</p>
+  </div>
+
+  <!-- Flow -->
+  <div class="flow">
+
+    <!-- Step 1: Trigger -->
+    <div class="flow-step trigger">
+      <div class="step-num">1</div>
+      <div class="step-icon">🛰️</div>
+      <div class="step-title">Trigger detected</div>
+      <div class="step-body">Profinder data flags a job-change among existing champions, buyers, or product users across the group.</div>
+      <div class="step-detail">
+        <div><span class="label">Source:</span> Profinder data + CRM cross-ref</div>
+        <div><span class="label">Cadence:</span> daily sync</div>
+        <div><span class="label">Volume:</span> ~80–120/mån est.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+    </div>
+
+    <!-- Step 2: Routing logic -->
+    <div class="flow-step process">
+      <div class="step-num">2</div>
+      <div class="step-icon">🧭</div>
+      <div class="step-title">Cross-brand routing</div>
+      <div class="step-body">Logic decides which brand the champion is most likely to bring with them — based on prior brand-fit + new employer's needs.</div>
+      <div class="step-detail">
+        <div><span class="label">Input:</span> brand-history, new-co ICP, role</div>
+        <div><span class="label">Output:</span> brand match + AE assignment</div>
+        <div><span class="label">Engine:</span> Claude + scoring rules</div>
+      </div>
+      <div class="flow-arrow">→</div>
+    </div>
+
+    <!-- Step 3: Outreach -->
+    <div class="flow-step outreach">
+      <div class="step-num">3</div>
+      <div class="step-icon">🎥</div>
+      <div class="step-title">Personalized outreach</div>
+      <div class="step-body">CSM/AE records a 60-sec Loom referencing prior wins. Email sequence delivered, sales-assisted, never spammy.</div>
+      <div class="step-detail">
+        <div><span class="label">Channel:</span> Loom + email + LinkedIn</div>
+        <div><span class="label">Cadence:</span> 3-touch over 14 days</div>
+        <div><span class="label">AI assist:</span> message-draft per champion</div>
+      </div>
+      <div class="flow-arrow">→</div>
+    </div>
+
+    <!-- Step 4: Outcome -->
+    <div class="flow-step outcome">
+      <div class="step-num">4</div>
+      <div class="step-icon">📈</div>
+      <div class="step-title">Conversion + nurture</div>
+      <div class="step-body">Booked demo or sales-assisted onboarding at champion's new employer. Wins logged in CRM with attribution to Bloodhound.</div>
+      <div class="step-detail">
+        <div><span class="label">Hypothesis:</span> 5–10× cold outbound conv.</div>
+        <div><span class="label">Attribution:</span> source = Bloodhound</div>
+        <div><span class="label">Long-tail:</span> nurture if not in-market</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Cross-brand routing logic -->
+  <div class="split-section">
+    <div class="split-title">Cross-brand routing logic — examples</div>
+    <div class="split-grid">
+      <div class="split-item">
+        <div class="split-brand"><span class="brand-dot ungapped"></span>Ungapped champion → new role</div>
+        <div class="split-rule">If new employer is public-sector / member-org → Ungapped AE follows up. If new employer is enterprise/private → check Liana fit first.</div>
+      </div>
+      <div class="split-item">
+        <div class="split-brand"><span class="brand-dot profinder"></span>Profinder champion → new role</div>
+        <div class="split-rule">Always default to Profinder follow-up (sales-data is universal). Add cross-sell layer if new employer fits Liana CMS or Ungapped use cases.</div>
+      </div>
+      <div class="split-item">
+        <div class="split-brand"><span class="brand-dot liana"></span>Liana champion → new role</div>
+        <div class="split-rule">Liana AE leads. If new employer is &lt;200 emp Nordic → also flag Ungapped fit. If sales-org &gt; 20 reps → also flag Profinder fit.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI band -->
+  <div class="kpi-band">
+    <div class="kpi-cell">
+      <div class="kpi-cell-label">Conversion rate</div>
+      <div class="kpi-cell-value">5–10×</div>
+      <div class="kpi-cell-context">vs cold outbound (hypothesis)</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-cell-label">Volume per quarter</div>
+      <div class="kpi-cell-value">240–360</div>
+      <div class="kpi-cell-context">job-change triggers across group</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-cell-label">Pipeline target (12m)</div>
+      <div class="kpi-cell-value">15+</div>
+      <div class="kpi-cell-context">deals attributed to Bloodhound</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-cell-label">CAC vs new logo</div>
+      <div class="kpi-cell-value">~50%</div>
+      <div class="kpi-cell-context">leverages existing relationship</div>
+    </div>
+  </div>
+
+  <!-- Why-it-works callout -->
+  <div class="callout">
+    <div class="callout-title">Why this is a group-CMO play, not a brand play</div>
+    <div class="callout-body">
+      No single brand-CMO can build this loop. <strong>It requires Profinder data, three brands' CRMs, and one shared routing layer.</strong> When it works, every champion who changes jobs becomes a multiplier — and the Profinder brand grows on Liana and Ungapped traffic.
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="slide-footer">
+    <div>Bloodhound · cross-brand campaign concept · Group Marketing 2026</div>
+    <div>Erik Oliva Werner · Group CMO candidate</div>
+  </div>
+
+</div>
+
+</body>
+</html>
