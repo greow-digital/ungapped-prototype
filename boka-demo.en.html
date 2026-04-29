@@ -1567,15 +1567,15 @@ section { padding: 48px 0; }
   line-height: 1.3;
 }
 .booking-card .card-sub {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text-mid);
-  margin: 0 0 20px;
-  line-height: 1.5;
+  margin: 0 0 14px;
+  line-height: 1.45;
 }
 .form-step {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   opacity: 1;
   transition: opacity 0.2s ease;
 }
@@ -1584,26 +1584,34 @@ section { padding: 48px 0; }
 .field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+}
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 479px) {
+  .field-row { grid-template-columns: 1fr; gap: 12px; }
 }
 .field label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text);
 }
 .field label .req { color: var(--coral); }
-.field label .optional { color: var(--text-mid); font-weight: 400; font-size: 13px; }
+.field label .optional { color: var(--text-mid); font-weight: 400; font-size: 12px; }
 .field input[type="email"],
 .field input[type="text"],
 .field input[type="tel"],
 .field select {
   width: 100%;
-  height: 48px;
-  padding: 12px 14px;
+  height: 42px;
+  padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius-btn);
   font-family: inherit;
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text);
   background: #fff;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -1624,17 +1632,17 @@ section { padding: 48px 0; }
 .checkbox-group {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 8px;
+  gap: 6px;
 }
 @media (min-width: 480px) { .checkbox-group { grid-template-columns: 1fr 1fr; } }
 .checkbox-group label {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s;
@@ -1668,7 +1676,7 @@ section { padding: 48px 0; }
   color: var(--text-mid);
   background: none;
   border: none;
-  padding: 0 0 12px;
+  padding: 0 0 8px;
   cursor: pointer;
   font-weight: 600;
 }
@@ -2002,21 +2010,25 @@ section { padding: 48px 0; }
           <p class="card-sub">We tailor the demo to your tools and needs. Takes 30 seconds.</p>
           <input type="hidden" name="email" id="email-hidden">
 
-          <div class="field">
-            <label for="firstname">First name <span class="req" aria-hidden="true">*</span></label>
-            <input id="firstname" name="firstname" type="text" required aria-required="true" autocomplete="given-name">
+          <div class="field-row">
+            <div class="field">
+              <label for="firstname">First name <span class="req" aria-hidden="true">*</span></label>
+              <input id="firstname" name="firstname" type="text" required aria-required="true" autocomplete="given-name">
+            </div>
+            <div class="field">
+              <label for="lastname">Last name <span class="req" aria-hidden="true">*</span></label>
+              <input id="lastname" name="lastname" type="text" required aria-required="true" autocomplete="family-name">
+            </div>
           </div>
-          <div class="field">
-            <label for="lastname">Last name <span class="req" aria-hidden="true">*</span></label>
-            <input id="lastname" name="lastname" type="text" required aria-required="true" autocomplete="family-name">
-          </div>
-          <div class="field">
-            <label for="company">Company name <span class="req" aria-hidden="true">*</span></label>
-            <input id="company" name="company" type="text" required aria-required="true" autocomplete="organization">
-          </div>
-          <div class="field">
-            <label for="phone">Phone number <span class="optional">(optional)</span></label>
-            <input id="phone" name="phone" type="tel" autocomplete="tel">
+          <div class="field-row">
+            <div class="field">
+              <label for="company">Company name <span class="req" aria-hidden="true">*</span></label>
+              <input id="company" name="company" type="text" required aria-required="true" autocomplete="organization">
+            </div>
+            <div class="field">
+              <label for="phone">Phone number <span class="optional">(optional)</span></label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel">
+            </div>
           </div>
 
           <fieldset class="field" style="border:0;padding:0;margin:0;">
