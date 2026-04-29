@@ -1598,105 +1598,176 @@ body {
       </div>
     </div>
 
-    <!-- SLIM FUNNEL -->
+    <!-- FULL FUNNEL (mirrors operational tab) -->
     <div class="card">
       <div class="card-header">
         <div>
-          <div class="card-title">Funnel · group rollup</div>
-          <div class="card-sub">One primary count per stage · stage-to-stage conversion · sub-metrics live on brand-level dashboards</div>
+          <div class="card-title">Full-funnel performance · Acquisition → Closed-won</div>
+          <div class="card-sub">Period totals · funnel does not respect date granularity (always cumulative)</div>
         </div>
         <div class="card-meta">Last 90 days</div>
       </div>
 
       <div class="funnel-stages">
 
+        <!-- Acquisition (paid media) -->
         <div class="funnel-stage">
           <div class="stage-label">Acquisition</div>
           <div class="stage-bar-wrap">
-            <div class="stage-bar" style="width: 100%; background: var(--coral);"></div>
-            <span class="stage-bar-value">218k</span>
+            <div class="stage-bar" style="width: 60%;"></div>
+            <span class="stage-bar-value">2.42M impressions</span>
             <span class="stage-bar-delta up">▲ +12%</span>
           </div>
-          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">impressions across paid + organic</span></div>
+          <div class="stage-detail">
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">Cost</div>
+              <div class="stage-detail-value">145 kSEK <span class="delta-inline up">+8%</span></div>
+            </div>
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">CTR</div>
+              <div class="stage-detail-value">1.84% <span class="delta-inline up">+0.18%</span></div>
+            </div>
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">CPM</div>
+              <div class="stage-detail-value">60 SEK <span class="delta-inline down">+6%</span></div>
+            </div>
+          </div>
           <div class="stage-conv">
-            <span class="stage-conv-rate">5.5%</span>
-            <span class="stage-conv-label">→ sessions</span>
+            <span class="stage-conv-rate">—</span>
+            <span class="stage-conv-label">top of funnel</span>
+          </div>
+        </div>
+
+        <!-- Sessions -->
+        <div class="funnel-stage">
+          <div class="stage-label">Sessions</div>
+          <div class="stage-bar-wrap">
+            <div class="stage-bar" style="width: 47%;"></div>
+            <span class="stage-bar-value">82,400 sessions</span>
+            <span class="stage-bar-delta up">▲ +8%</span>
+          </div>
+          <div class="stage-detail">
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">Avg time</div>
+              <div class="stage-detail-value">2:14 min <span class="delta-inline up">+6 sec</span></div>
+            </div>
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">Bounce</div>
+              <div class="stage-detail-value">42% <span class="delta-inline up">−2%</span></div>
+            </div>
+          </div>
+          <div class="stage-conv">
+            <span class="stage-conv-rate">3.4%</span>
+            <span class="stage-conv-label">CTR → session</span>
             <span class="stage-conv-delta up">▲ +0.4%</span>
           </div>
         </div>
 
-        <div class="funnel-stage">
-          <div class="stage-label">Sessions</div>
-          <div class="stage-bar-wrap">
-            <div class="stage-bar" style="width: 70%; background: var(--coral);"></div>
-            <span class="stage-bar-value">12,000</span>
-            <span class="stage-bar-delta up">▲ +18%</span>
-          </div>
-          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">unique website sessions, all brands</span></div>
-          <div class="stage-conv">
-            <span class="stage-conv-rate">5.4%</span>
-            <span class="stage-conv-label">→ conversions</span>
-            <span class="stage-conv-delta up">▲ +0.6%</span>
-          </div>
-        </div>
-
+        <!-- Conversions -->
         <div class="funnel-stage">
           <div class="stage-label">Conversions</div>
           <div class="stage-bar-wrap">
-            <div class="stage-bar" style="width: 35%; background: var(--coral);"></div>
-            <span class="stage-bar-value">650</span>
-            <span class="stage-bar-delta up">▲ +24%</span>
+            <div class="stage-bar" style="width: 30%;"></div>
+            <span class="stage-bar-value">8,440 total</span>
+            <span class="stage-bar-delta up">▲ +18%</span>
           </div>
-          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">demo + signup + content download</span></div>
+          <div class="stage-detail">
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">Signups</div>
+              <div class="stage-detail-value">6,400 <span class="delta-inline up">+22%</span></div>
+            </div>
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">Demos</div>
+              <div class="stage-detail-value">240 <span class="delta-inline up">+34%</span></div>
+            </div>
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">Downloads</div>
+              <div class="stage-detail-value">1,800 <span class="delta-inline down">−8%</span></div>
+            </div>
+          </div>
           <div class="stage-conv">
-            <span class="stage-conv-rate">28%</span>
-            <span class="stage-conv-label">→ MQL</span>
-            <span class="stage-conv-delta up">▲ +3%</span>
+            <span class="stage-conv-rate">10.2%</span>
+            <span class="stage-conv-label">session → conv</span>
+            <span class="stage-conv-delta up">▲ +0.9%</span>
           </div>
         </div>
 
+        <!-- MQLs -->
         <div class="funnel-stage">
           <div class="stage-label">MQLs</div>
           <div class="stage-bar-wrap">
-            <div class="stage-bar" style="width: 20%; background: var(--coral);"></div>
-            <span class="stage-bar-value">182</span>
-            <span class="stage-bar-delta up">▲ +28%</span>
+            <div class="stage-bar" style="width: 16%;"></div>
+            <span class="stage-bar-value">1,240 MQLs</span>
+            <span class="stage-bar-delta up">▲ +18%</span>
           </div>
-          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">lead-score ≥ 60 · sales-validated</span></div>
+          <div class="stage-detail">
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">Lead-score</div>
+              <div class="stage-detail-value">1,240 <span class="delta-inline up">+18%</span></div>
+            </div>
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">Qual rate</div>
+              <div class="stage-detail-value">36% <span class="delta-inline down">−2%</span></div>
+            </div>
+          </div>
           <div class="stage-conv">
-            <span class="stage-conv-rate">48%</span>
-            <span class="stage-conv-label">→ SQL</span>
-            <span class="stage-conv-delta up">▲ +3%</span>
+            <span class="stage-conv-rate">14.7%</span>
+            <span class="stage-conv-label">conv → MQL</span>
+            <span class="stage-conv-delta down">▼ −0.6%</span>
           </div>
         </div>
 
+        <!-- SQLs -->
         <div class="funnel-stage">
           <div class="stage-label">SQLs</div>
           <div class="stage-bar-wrap">
-            <div class="stage-bar" style="width: 10%; background: var(--coral);"></div>
-            <span class="stage-bar-value">87</span>
+            <div class="stage-bar" style="width: 8%;"></div>
+            <span class="stage-bar-value">510 SQLs</span>
             <span class="stage-bar-delta up">▲ +14%</span>
           </div>
-          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">accepted by sales · in active pipeline</span></div>
+          <div class="stage-detail">
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">Accepted</div>
+              <div class="stage-detail-value">510 <span class="delta-inline up">+14%</span></div>
+            </div>
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">Cycle</div>
+              <div class="stage-detail-value">38 days <span class="delta-inline up">−4 days</span></div>
+            </div>
+          </div>
           <div class="stage-conv">
-            <span class="stage-conv-rate">25%</span>
-            <span class="stage-conv-label">→ won</span>
+            <span class="stage-conv-rate">41%</span>
+            <span class="stage-conv-label">MQL → SQL</span>
             <span class="stage-conv-delta up">▲ +3%</span>
           </div>
         </div>
 
+        <!-- Closed won -->
         <div class="funnel-stage">
           <div class="stage-label">Closed won</div>
           <div class="stage-bar-wrap">
-            <div class="stage-bar" style="width: 4%; background: var(--coral);"></div>
-            <span class="stage-bar-value">22</span>
-            <span class="stage-bar-delta up">▲ +18%</span>
+            <div class="stage-bar" style="width: 4%; background: linear-gradient(90deg, var(--coral) 0%, #c93a5a 100%);"></div>
+            <span class="stage-bar-value">87 won</span>
+            <span class="stage-bar-delta up">▲ +24%</span>
           </div>
-          <div class="stage-detail" style="display: block;"><span style="font-size: 11px; color: var(--text-mid);">21.6 MSEK ARR · avg ACV 980 kSEK</span></div>
+          <div class="stage-detail">
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">ARR</div>
+              <div class="stage-detail-value">4.2 MSEK <span class="delta-inline up">+18%</span></div>
+            </div>
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">ACV</div>
+              <div class="stage-detail-value">48 kSEK <span class="delta-inline down">−5%</span></div>
+            </div>
+            <div class="stage-detail-item">
+              <div class="stage-detail-label">Payback</div>
+              <div class="stage-detail-value">14 mo <span class="delta-inline up">−2 mo</span></div>
+            </div>
+          </div>
           <div class="stage-conv">
-            <span class="stage-conv-rate">—</span>
-            <span class="stage-conv-label">end</span>
-            <span class="stage-conv-delta">&nbsp;</span>
+            <span class="stage-conv-rate">17%</span>
+            <span class="stage-conv-label">SQL → won</span>
+            <span class="stage-conv-delta up">▲ +2%</span>
           </div>
         </div>
 
